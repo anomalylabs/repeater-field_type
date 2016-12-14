@@ -1,0 +1,25 @@
+<div class="repeater-item-controls">
+    <ul class="list-inline">
+        <li class="list-inline-item">
+            <a href="#" class="repeater-handle" onclick="return false;">
+                <i class="fa fa-arrows"></i>
+            </a>
+        </li>
+        <li class="list-inline-item">
+            {{ field_type.placeholder }}
+        </li>
+    </ul>
+
+    <ul class="list-inline pull-right">
+        <li class="list-inline-item">
+            <a href="#" data-toggle="collapse">
+                <i class="fa fa-toggle-on"></i>
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="#" onclick="$(this).closest('.repeater-item').remove(); return false;">
+                <i class="fa fa-trash"></i>
+            </a>
+        </li>
+    </ul>
+</div>

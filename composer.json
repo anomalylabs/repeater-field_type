@@ -1,0 +1,9 @@
+{
+    "name": "anomaly/repeater-field_type",
+    "type": "streams-addon",
+    "autoload": {
+        "psr-4": {
+            "Anomaly\\RepeaterFieldType\\": "src/"
+        }
+    }
+}

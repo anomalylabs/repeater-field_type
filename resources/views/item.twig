@@ -1,0 +1,13 @@
+<div class="repeater-item">
+
+    {% include "anomaly.field_type.repeater::partials/controls" %}
+
+    <div class="clearfix"></div>
+
+    {% include "anomaly.field_type.repeater::partials/fields" %}
+
+    <div class="repeater-body">
+        {{ form.make().getFormContent()|raw }}
+    </div>
+
+</div>

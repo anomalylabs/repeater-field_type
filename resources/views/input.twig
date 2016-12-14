@@ -1,0 +1,20 @@
+{{ asset_add('styles.css', 'anomaly.field_type.repeater::scss/repeater.scss') }}
+
+{{ asset_add("scripts.js", "streams::js/table/jquery-sortable.js") }}
+{{ asset_add('scripts.js', 'anomaly.field_type.repeater::js/input.js') }}
+
+<div {{ html_attributes(field_type.attributes) }}>
+
+    <div class="repeater-list">
+        {% for form in field_type.forms %}
+            {% include "anomaly.field_type.repeater::item" with {'form': form} %}
+        {% endfor %}
+    </div>
+
+    <div class="repeater-controls">
+        <a href="/streams/field_type/repeater/form/{{ field_type.id() }}" class="add-row btn btn-sm btn-success">
+            {{ trans('anomaly.field_type.repeater::input.add_row') }}
+        </a>
+    </div>
+
+</div>
