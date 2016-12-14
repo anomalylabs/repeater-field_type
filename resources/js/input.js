@@ -10,7 +10,7 @@ $(function () {
 
         var collapsed = Cookies.getJSON(cookie);
 
-        items.each(function (index) {
+        items.each(function () {
 
             var item = $(this);
             var toggle = $(this).find('[data-toggle="collapse"]');
@@ -22,35 +22,35 @@ $(function () {
                 collapsed = {};
             }
 
-            if (collapsed[index] == true) {
+            if (collapsed[items.index(item)] == true) {
                 item
                     .toggleClass('collapsed')
                     .find('[data-toggle="collapse"] i')
                     .toggleClass('fa-toggle-on')
                     .toggleClass('fa-toggle-off');
             }
+        });
 
-            /**
-             * Toggle displaying children.
-             */
-            toggle.click(function (e) {
+        wrapper.on('click', '[data-toggle="collapse"]', function() {
 
-                e.preventDefault();
+            var toggle = $(this);
+            var item = toggle.closest('.repeater-item');
 
-                item
-                    .toggleClass('collapsed')
-                    .find('[data-toggle="collapse"] i')
-                    .toggleClass('fa-toggle-on')
-                    .toggleClass('fa-toggle-off');
+            item
+                .toggleClass('collapsed')
+                .find('[data-toggle="collapse"] i')
+                .toggleClass('fa-toggle-on')
+                .toggleClass('fa-toggle-off');
 
-                if (typeof collapsed == 'undefined') {
-                    collapsed = {};
-                }
+            if (typeof collapsed == 'undefined') {
+                collapsed = {};
+            }
 
-                collapsed[index] = item.hasClass('collapsed');
+            collapsed[items.index(item)] = item.hasClass('collapsed');
 
-                Cookies.set(cookie, JSON.stringify(collapsed), {path: window.location.pathname});
-            });
+            Cookies.set(cookie, JSON.stringify(collapsed), {path: window.location.pathname});
+
+            return false;
         });
 
         wrapper.indexCollapsed = function() {
