@@ -247,7 +247,14 @@ class RepeaterFieldType extends FieldType
             return [];
         }
 
-        return $forms->getForms();
+        return array_map(
+            function (FormBuilder $form) {
+                return $form
+                    ->make()
+                    ->getForm();
+            },
+            $forms->getForms()->all()
+        );
     }
 
     /**
