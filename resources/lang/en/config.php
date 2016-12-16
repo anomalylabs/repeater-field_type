@@ -2,7 +2,7 @@
 
 return [
     'related' => [
-        'label' => 'Related Streams',
+        'label' => 'Related Repeater',
     ],
     'min'     => [
         'label'        => 'Minimum Items',
