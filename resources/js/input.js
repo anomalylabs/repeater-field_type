@@ -31,7 +31,7 @@ $(function () {
             }
         });
 
-        wrapper.on('click', '[data-toggle="collapse"]', function() {
+        wrapper.on('click', '[data-toggle="collapse"]', function () {
 
             var toggle = $(this);
             var item = toggle.closest('.repeater-item');
@@ -53,7 +53,7 @@ $(function () {
             return false;
         });
 
-        wrapper.indexCollapsed = function() {
+        wrapper.indexCollapsed = function () {
 
             wrapper.find('.repeater-list').find('.repeater-item').each(function (index) {
 
@@ -132,7 +132,7 @@ $(function () {
 
             $(wrapper)
                 .find('.repeater-list')
-                .append($('<div class="repeater-item"><div class="repeater-loading">Loading...</div></div>').load($(this).attr('href') + '?instance=' + count, function () {
+                .append($('<div class="repeater-item"><div class="repeater-loading">Loading...</div></div>').load($(this).attr('href') + '&instance=' + count, function () {
                     wrapper.sort();
                     wrapper.indexCollapsed();
                 }));

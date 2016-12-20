@@ -12,7 +12,7 @@
     </div>
 
     <div class="repeater-controls">
-        <a href="/streams/field_type/repeater/form/{{ field_type.id() }}" class="add-row btn btn-sm btn-success">
+        <a href="/admin/field_type/repeater/form/{{ field_type.id() }}?prefix={{ field_type.prefix }}" class="add-row btn btn-sm btn-success">
             {{ trans('anomaly.field_type.repeater::button.add_row') }}
         </a>
 
