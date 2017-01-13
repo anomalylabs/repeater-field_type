@@ -23,13 +23,6 @@ class RepeaterFieldType extends FieldType
 {
 
     /**
-     * The input class.
-     *
-     * @var string
-     */
-    protected $class = 'repeater-container';
-
-    /**
      * No database column.
      *
      * @var bool
@@ -37,18 +30,18 @@ class RepeaterFieldType extends FieldType
     protected $columnType = false;
 
     /**
+     * The input class.
+     *
+     * @var string
+     */
+    protected $class = 'repeater-container';
+
+    /**
      * The input view.
      *
      * @var string
      */
     protected $inputView = 'anomaly.field_type.repeater::input';
-
-    /**
-     * The filter view.
-     *
-     * @var string
-     */
-    protected $filterView = 'anomaly.field_type.repeater::filter';
 
     /**
      * The field rules.

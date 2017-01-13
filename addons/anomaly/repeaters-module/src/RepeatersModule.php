@@ -13,12 +13,11 @@ class RepeatersModule extends Module
 {
 
     /**
-     * This module does not
-     * display in navigation.
+     * The module icon.
      *
-     * @var bool
+     * @var string
      */
-    protected $navigation = false;
+    protected $icon = 'fa fa-repeat';
 
     /**
      * The addon sections.

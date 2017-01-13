@@ -132,7 +132,7 @@ $(function () {
 
             $(wrapper)
                 .find('.repeater-list')
-                .append($('<div class="repeater-item"><div class="repeater-loading">Loading...</div></div>').load($(this).attr('href') + '&instance=' + count, function () {
+                .append($('<div class="repeater-item"><div class="repeater-loading">' + $(this).data('loading') + '...</div></div>').load($(this).attr('href') + '&instance=' + count, function () {
                     wrapper.sort();
                     wrapper.indexCollapsed();
                 }));

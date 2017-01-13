@@ -12,13 +12,10 @@
     </div>
 
     <div class="repeater-controls">
-        <a href="/admin/field_type/repeater/form/{{ field_type.id() }}?prefix={{ field_type.prefix }}" class="add-row btn btn-sm btn-success">
+        <a href="{{ url('admin/field_type/repeater/form/' ~ field_type.id() ~ '?prefix=' ~ field_type.prefix) }}"
+           class="add-row btn btn-sm btn-success"
+           data-loading="{{ trans('anomaly.field_type.repeater::message.loading') }}">
             {{ trans('anomaly.field_type.repeater::button.add_row') }}
-        </a>
-
-        <a href="/admin/repeaters" target="_blank" class="btn btn-sm btn-warning">
-            {{ icon('wrench') }}
-            {{ trans('anomaly.field_type.repeater::button.manage') }}
         </a>
     </div>
 
