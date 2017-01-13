@@ -17,7 +17,7 @@ class RepeatersModule extends Module
      *
      * @var string
      */
-    protected $icon = 'fa fa-repeat';
+    protected $icon = 'fa fa-th-list';
 
     /**
      * The addon sections.
