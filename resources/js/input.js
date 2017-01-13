@@ -1,8 +1,10 @@
 $(function () {
 
-    var repeaters = $('[data-provides="anomaly.field_type.repeater"]');
+    var repeaters = $('[data-provides="anomaly.field_type.repeater"]:not([data-initialized])');
 
     repeaters.each(function () {
+
+        $(this).attr('data-initialized', '');
 
         var wrapper = $(this);
         var items = $(this).find('.repeater-item');
