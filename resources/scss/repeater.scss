@@ -30,6 +30,12 @@
                     color: #ffffff;
                 }
 
+                .dropdown-menu {
+                    a {
+                        color: $dropdown-link-color;
+                    }
+                }
+
                 ul {
                     margin: 0;
                     padding: 0;

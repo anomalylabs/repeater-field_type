@@ -16,6 +16,7 @@ $(function () {
 
             var item = $(this);
             var toggle = $(this).find('[data-toggle="collapse"]');
+            var text = toggle.find('span');
 
             /**
              * Hide initial items.
@@ -28,8 +29,14 @@ $(function () {
                 item
                     .toggleClass('collapsed')
                     .find('[data-toggle="collapse"] i')
-                    .toggleClass('fa-toggle-on')
-                    .toggleClass('fa-toggle-off');
+                    .toggleClass('fa-compress')
+                    .toggleClass('fa-expand');
+
+                if (toggle.find('i').hasClass('fa-compress')) {
+                    text.text(toggle.data('collapse'));
+                } else {
+                    text.text(toggle.data('expand'));
+                }
             }
         });
 
@@ -37,12 +44,24 @@ $(function () {
 
             var toggle = $(this);
             var item = toggle.closest('.repeater-item');
+            var text = toggle.find('span');
 
             item
                 .toggleClass('collapsed')
                 .find('[data-toggle="collapse"] i')
-                .toggleClass('fa-toggle-on')
-                .toggleClass('fa-toggle-off');
+                .toggleClass('fa-compress')
+                .toggleClass('fa-expand');
+
+            if (toggle.find('i').hasClass('fa-compress')) {
+                text.text(toggle.data('collapse'));
+            } else {
+                text.text(toggle.data('expand'));
+            }
+
+            toggle
+                .closest('.dropdown')
+                .find('.dropdown-toggle')
+                .trigger('click');
 
             if (typeof collapsed == 'undefined') {
                 collapsed = {};
