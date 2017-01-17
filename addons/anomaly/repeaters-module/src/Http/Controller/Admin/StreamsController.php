@@ -42,6 +42,7 @@ class StreamsController extends AdminController
     public function create(StreamFormBuilder $builder)
     {
         return $builder
+            ->setPrefix('repeater_')
             ->setNamespace('repeater')
             ->render();
     }
