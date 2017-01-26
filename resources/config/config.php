@@ -22,6 +22,9 @@ return [
             },
         ],
     ],
+    'add_row' => [
+        'type' => 'anomaly.field_type.text',
+    ],
     'min'     => [
         'type'   => 'anomaly.field_type.integer',
         'config' => [

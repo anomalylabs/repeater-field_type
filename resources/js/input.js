@@ -7,6 +7,7 @@ $(function () {
         $(this).attr('data-initialized', '');
 
         var wrapper = $(this);
+        var instance = $(this).data('instance');
         var items = $(this).find('.repeater-item');
         var cookie = 'repeater:' + $(this).closest('.repeater-container').data('field_name');
 
@@ -91,7 +92,7 @@ $(function () {
         };
 
         wrapper.sort = function () {
-            wrapper.find('.repeater-list').sortable({
+            wrapper.find('> .repeater-list').sortable({
                 handle: '.repeater-handle',
                 placeholder: '<div class="placeholder"></div>',
                 containerSelector: '.repeater-list',
@@ -152,7 +153,7 @@ $(function () {
             var count = wrapper.find('.repeater-item').length + 1;
 
             $(wrapper)
-                .find('.repeater-list')
+                .find('> .repeater-list')
                 .append($('<div class="repeater-item"><div class="repeater-loading">' + $(this).data('loading') + '...</div></div>').load($(this).attr('href') + '&instance=' + count, function () {
                     wrapper.sort();
                     wrapper.indexCollapsed();
