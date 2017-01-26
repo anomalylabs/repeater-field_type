@@ -44,6 +44,15 @@ class RepeaterFieldType extends FieldType
     protected $inputView = 'anomaly.field_type.repeater::input';
 
     /**
+     * The field type config.
+     *
+     * @var array
+     */
+    protected $config = [
+        'manage' => true,
+    ];
+
+    /**
      * The field rules.
      *
      * @var array

@@ -7,6 +7,11 @@ return [
                 'admin/repeaters'
             ) . '" target="_blank">repeater</a>.',
     ],
+    'add_row' => [
+        'label'        => 'Add Row',
+        'instructions' => 'Specify custom text for the "Add Row" button.',
+        'placeholder'  => 'Add Row',
+    ],
     'min'     => [
         'label'        => 'Minimum Items',
         'instructions' => 'Specify the minimum number of allowed items.',
