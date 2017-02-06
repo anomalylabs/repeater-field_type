@@ -15,7 +15,7 @@
 
     <div class="repeater-controls">
 
-        <a href="{{ url('admin/field_type/repeater/form/' ~ field_type.id() ~ '?prefix=' ~ field_type.prefix) }}"
+        <a href="{{ url('admin/repeater-field_type/form/' ~ field_type.id() ~ '?prefix=' ~ field_type.prefix) }}"
            class="add-row btn btn-sm btn-success"
            data-loading="{{ trans('anomaly.field_type.repeater::message.loading') }}">
             {{ trans(field_type.config.add_row ?: 'anomaly.field_type.repeater::button.add_row') }}
