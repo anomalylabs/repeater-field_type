@@ -9,6 +9,7 @@ $(function () {
         var wrapper = $(this);
         var instance = $(this).data('instance');
         var items = $(this).find('.repeater-item');
+        var add = wrapper.find('.add-row[data-instance="' + instance + '"]');
         var cookie = 'repeater:' + $(this).closest('.repeater-container').data('field_name');
 
         var collapsed = Cookies.getJSON(cookie);
@@ -146,7 +147,7 @@ $(function () {
 
         wrapper.sort();
 
-        wrapper.find('.add-row').click(function (e) {
+        add.click(function (e) {
 
             e.preventDefault();
 

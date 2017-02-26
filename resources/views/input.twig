@@ -3,7 +3,7 @@
 {{ asset_add("scripts.js", "streams::js/table/jquery-sortable.js") }}
 {{ asset_add('scripts.js', 'anomaly.field_type.repeater::js/input.js') }}
 
-{% set instance = 'now'|date('U') %}
+{% set instance = str_random() %}
 
 <div {{ html_attributes(field_type.attributes) }} data-instance="{{ instance }}">
 
@@ -17,12 +17,16 @@
 
         <a href="{{ url('admin/repeater-field_type/form/' ~ field_type.id() ~ '?prefix=' ~ field_type.prefix) }}"
            class="add-row btn btn-sm btn-success"
+           data-instance="{{ instance }}"
            data-loading="{{ trans('anomaly.field_type.repeater::message.loading') }}">
             {{ trans(field_type.config.add_row ?: 'anomaly.field_type.repeater::button.add_row') }}
         </a>
 
         {% if field_type.config.manage %}
-            <a href="{{ url('admin/repeaters') }}" class="btn btn-sm btn-warning" target="_blank">
+            <a href="{{ url('admin/repeaters') }}"
+               class="btn btn-sm btn-warning"
+               data-instance="{{ instance }}"
+               target="_blank">
                 {{ icon('fa fa-wrench') }}
                 {{ trans('anomaly.field_type.repeater::button.manage') }}
             </a>
