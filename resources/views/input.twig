@@ -23,10 +23,7 @@
         </a>
 
         {% if field_type.config.manage %}
-            <a href="{{ url('admin/repeaters') }}"
-               class="btn btn-sm btn-warning"
-               data-instance="{{ instance }}"
-               target="_blank">
+            <a href="{{ url('admin/repeaters') }}" class="btn btn-sm btn-warning" target="_blank">
                 {{ icon('fa fa-wrench') }}
                 {{ trans('anomaly.field_type.repeater::button.manage') }}
             </a>
