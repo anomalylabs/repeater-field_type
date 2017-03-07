@@ -39,7 +39,7 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
         //$breadcrumb->add('anomaly.module.repeaters::addon.name', 'admin/repeaters');
 
         $addon = $integrator->register(
-            __DIR__ . '/../addons/anomaly/repeaters-module/',
+            realpath(__DIR__ . '/../addons/anomaly/repeaters-module/'),
             'anomaly.module.repeaters',
             true,
             true
@@ -52,7 +52,7 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
 //            $breadcrumb->add('anomaly.module.repeaters::addon.name', 'admin/repeaters');
 //
 //            $integrator->register(
-//                __DIR__ . '/../addons/anomaly/repeaters-module/',
+//                realpath(__DIR__ . '/../addons/anomaly/repeaters-module/'),
 //                'anomaly.module.repeaters',
 //                true,
 //                true
