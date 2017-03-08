@@ -33,6 +33,7 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
      *
      * @param AddonIntegrator $integrator
      * @param AddonCollection $addons
+     * @param EntryModel      $model
      */
     public function register(
         AddonIntegrator $integrator,
