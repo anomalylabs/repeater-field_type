@@ -3,12 +3,12 @@
 use Anomaly\RepeaterFieldType\Command\GetMultiformFromPost;
 use Anomaly\RepeaterFieldType\Command\GetMultiformFromValue;
 use Anomaly\RepeaterFieldType\Validation\ValidateRepeater;
-use Anomaly\RepeaterFieldType\Form\RepeaterFormBuilder;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
 use Anomaly\Streams\Platform\Stream\Contract\StreamInterface;
 use Anomaly\Streams\Platform\Ui\Form\Multiple\MultipleFormBuilder;
+use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -225,8 +225,16 @@ class RepeaterFieldType extends FieldType
         /* @var StreamInterface $stream */
         $stream = $this->getRelatedStream();
 
+        $builderClassName = $stream->getEntryModel()->getBoundModelNamespace()
+            .'\\Support\\RepeaterFieldType\\FormBuilder';
+
         /* @var FormBuilder $builder */
-        $builder = app(RepeaterFormBuilder::class)
+        if (!class_exists($builderClassName))
+        {
+            $builderClassName = FormBuilder::class;
+        }
+
+        $builder = app($builderClassName)
             ->setModel($stream->getEntryModel())
             ->setOption('repeater_instance', $instance)
             ->setOption('repeater_field', $field->getId())
@@ -250,7 +258,7 @@ class RepeaterFieldType extends FieldType
         }
 
         return array_map(
-            function (RepeaterFormBuilder $form) {
+            function (FormBuilder $form) {
                 return $form
                     ->make()
                     ->getForm();
@@ -264,7 +272,7 @@ class RepeaterFieldType extends FieldType
      *
      * @param FormBuilder $builder
      */
-    public function handle(RepeaterFormBuilder $builder)
+    public function handle(FormBuilder $builder)
     {
         $entry = $builder->getFormEntry();
 
