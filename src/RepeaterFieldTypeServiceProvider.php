@@ -40,7 +40,7 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
         EntryModel $model
     ) {
         $addon = $integrator->register(
-            __DIR__ . '/../addons/anomaly/repeaters-module/',
+            realpath(__DIR__ . '/../addons/anomaly/repeaters-module/'),
             'anomaly.module.repeaters',
             true,
             true
