@@ -1,9 +1,28 @@
 {
     "name": "anomaly/repeater-field_type",
     "type": "streams-addon",
+    "description": "A repeating data structure field type.",
+    "keywords": [
+        "repeater field type",
+        "pyrocms field type"
+    ],
+    "homepage": "http://pyrocms.com/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PyroCMS, Inc.",
+            "email": "ryan@pyrocms.com",
+            "homepage": "http://pyrocms.com/",
+            "role": "Owner"
+        }
+    ],
+    "support": {
+        "email": "support@pyrocms.com"
+    },
     "autoload": {
         "psr-4": {
-            "Anomaly\\RepeaterFieldType\\": "src/"
+            "Anomaly\\RepeaterFieldType\\": "src/",
+            "Anomaly\\RepeatersModule\\": "addons/anomaly/repeaters-module/src/"
         }
     }
 }

@@ -1,11 +1,15 @@
 $(function () {
 
-    var repeaters = $('[data-provides="anomaly.field_type.repeater"]');
+    var repeaters = $('[data-provides="anomaly.field_type.repeater"]:not([data-initialized])');
 
     repeaters.each(function () {
 
+        $(this).attr('data-initialized', '');
+
         var wrapper = $(this);
+        var instance = $(this).data('instance');
         var items = $(this).find('.repeater-item');
+        var add = wrapper.find('.add-row[data-instance="' + instance + '"]');
         var cookie = 'repeater:' + $(this).closest('.repeater-container').data('field_name');
 
         var collapsed = Cookies.getJSON(cookie);
@@ -14,6 +18,7 @@ $(function () {
 
             var item = $(this);
             var toggle = $(this).find('[data-toggle="collapse"]');
+            var text = toggle.find('span');
 
             /**
              * Hide initial items.
@@ -26,21 +31,39 @@ $(function () {
                 item
                     .toggleClass('collapsed')
                     .find('[data-toggle="collapse"] i')
-                    .toggleClass('fa-toggle-on')
-                    .toggleClass('fa-toggle-off');
+                    .toggleClass('fa-compress')
+                    .toggleClass('fa-expand');
+
+                if (toggle.find('i').hasClass('fa-compress')) {
+                    text.text(toggle.data('collapse'));
+                } else {
+                    text.text(toggle.data('expand'));
+                }
             }
         });
 
-        wrapper.on('click', '[data-toggle="collapse"]', function() {
+        wrapper.on('click', '[data-toggle="collapse"]', function () {
 
             var toggle = $(this);
             var item = toggle.closest('.repeater-item');
+            var text = toggle.find('span');
 
             item
                 .toggleClass('collapsed')
                 .find('[data-toggle="collapse"] i')
-                .toggleClass('fa-toggle-on')
-                .toggleClass('fa-toggle-off');
+                .toggleClass('fa-compress')
+                .toggleClass('fa-expand');
+
+            if (toggle.find('i').hasClass('fa-compress')) {
+                text.text(toggle.data('collapse'));
+            } else {
+                text.text(toggle.data('expand'));
+            }
+
+            toggle
+                .closest('.dropdown')
+                .find('.dropdown-toggle')
+                .trigger('click');
 
             if (typeof collapsed == 'undefined') {
                 collapsed = {};
@@ -53,7 +76,7 @@ $(function () {
             return false;
         });
 
-        wrapper.indexCollapsed = function() {
+        wrapper.indexCollapsed = function () {
 
             wrapper.find('.repeater-list').find('.repeater-item').each(function (index) {
 
@@ -70,7 +93,7 @@ $(function () {
         };
 
         wrapper.sort = function () {
-            wrapper.find('.repeater-list').sortable({
+            wrapper.find('> .repeater-list').sortable({
                 handle: '.repeater-handle',
                 placeholder: '<div class="placeholder"></div>',
                 containerSelector: '.repeater-list',
@@ -124,15 +147,15 @@ $(function () {
 
         wrapper.sort();
 
-        wrapper.find('.add-row').click(function (e) {
+        add.click(function (e) {
 
             e.preventDefault();
 
             var count = wrapper.find('.repeater-item').length + 1;
 
             $(wrapper)
-                .find('.repeater-list')
-                .append($('<div class="repeater-item"><div class="repeater-loading">Loading...</div></div>').load($(this).attr('href') + '?instance=' + count, function () {
+                .find('> .repeater-list')
+                .append($('<div class="repeater-item"><div class="repeater-loading">' + $(this).data('loading') + '...</div></div>').load($(this).attr('href') + '&instance=' + count, function () {
                     wrapper.sort();
                     wrapper.indexCollapsed();
                 }));

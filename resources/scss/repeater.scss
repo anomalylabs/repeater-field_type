@@ -9,7 +9,7 @@
             &.dragged {
                 opacity: 0.2;
             }
-            
+
             &.collapsed {
 
                 .repeater-body {
@@ -24,10 +24,16 @@
             .repeater-item-controls {
                 color: #ffffff;
                 background: #3e3e3e;
-                padding: .5rem $grid-gutter-width/2;
+                padding: .5rem $spacer-x;
 
                 a {
                     color: #ffffff;
+                }
+
+                .dropdown-menu {
+                    a {
+                        color: $dropdown-link-color;
+                    }
                 }
 
                 ul {
@@ -35,7 +41,7 @@
                     padding: 0;
                     display: inline-block;
                 }
-                
+
                 .repeater-handle {
                     cursor: move;
                 }

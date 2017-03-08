@@ -4,20 +4,16 @@ use Anomaly\Streams\Platform\Stream\Contract\StreamInterface;
 
 return [
     'related' => [
-        'type'   => 'anomaly.field_type.select',
-        'config' => [
+        'type'     => 'anomaly.field_type.select',
+        'required' => true,
+        'config'   => [
             'options' => function (\Anomaly\Streams\Platform\Stream\Contract\StreamRepositoryInterface $streams) {
 
                 $options = [];
 
                 /* @var StreamInterface as $stream */
-                foreach ($streams->visible() as $stream) {
-                    $options[ucwords(str_replace('_', ' ', $stream->getNamespace()))][$stream->getEntryModelName(
-                    )] = $stream->getName();
-                }
-
-                foreach ($options as $namespace) {
-                    ksort($namespace);
+                foreach ($streams->findAllByNamespace('repeater') as $stream) {
+                    $options[$stream->getEntryModelName()] = $stream->getName();
                 }
 
                 ksort($options);
@@ -25,6 +21,9 @@ return [
                 return $options;
             },
         ],
+    ],
+    'add_row' => [
+        'type' => 'anomaly.field_type.text',
     ],
     'min'     => [
         'type'   => 'anomaly.field_type.integer',

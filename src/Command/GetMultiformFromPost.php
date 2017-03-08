@@ -57,6 +57,8 @@ class GetMultiformFromPost
             /* @var RepeaterFieldType $type */
             $type = $field->getType();
 
+            $type->setPrefix($this->fieldType->getPrefix());
+
             $form = $type->form($field, $item['instance']);
 
             if ($item['entry']) {

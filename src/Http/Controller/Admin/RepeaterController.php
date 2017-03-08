@@ -1,9 +1,9 @@
-<?php namespace Anomaly\RepeaterFieldType\Http\Controller;
+<?php namespace Anomaly\RepeaterFieldType\Http\Controller\Admin;
 
 use Anomaly\RepeaterFieldType\RepeaterFieldType;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
 use Anomaly\Streams\Platform\Field\Contract\FieldRepositoryInterface;
-use Anomaly\Streams\Platform\Http\Controller\PublicController;
+use Anomaly\Streams\Platform\Http\Controller\AdminController;
 
 /**
  * Class RepeaterController
@@ -12,7 +12,7 @@ use Anomaly\Streams\Platform\Http\Controller\PublicController;
  * @author PyroCMS, Inc. <support@pyrocms.com>
  * @author Ryan Thompson <ryan@pyrocms.com>
  */
-class RepeaterController extends PublicController
+class RepeaterController extends AdminController
 {
 
     /**
@@ -28,6 +28,8 @@ class RepeaterController extends PublicController
 
         /* @var RepeaterFieldType $type */
         $type = $field->getType();
+
+        $type->setPrefix($this->request->get('prefix'));
 
         return $type
             ->form($field, $this->request->get('instance'))

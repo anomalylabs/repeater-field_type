@@ -7,8 +7,8 @@ use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
 use Anomaly\Streams\Platform\Stream\Contract\StreamInterface;
-use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Anomaly\Streams\Platform\Ui\Form\Multiple\MultipleFormBuilder;
+use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -23,18 +23,18 @@ class RepeaterFieldType extends FieldType
 {
 
     /**
-     * The input class.
-     *
-     * @var string
-     */
-    protected $class = 'repeater-container';
-
-    /**
      * No database column.
      *
      * @var bool
      */
     protected $columnType = false;
+
+    /**
+     * The input class.
+     *
+     * @var string
+     */
+    protected $class = 'repeater-container';
 
     /**
      * The input view.
@@ -44,11 +44,13 @@ class RepeaterFieldType extends FieldType
     protected $inputView = 'anomaly.field_type.repeater::input';
 
     /**
-     * The filter view.
+     * The field type config.
      *
-     * @var string
+     * @var array
      */
-    protected $filterView = 'anomaly.field_type.repeater::filter';
+    protected $config = [
+        'manage' => true,
+    ];
 
     /**
      * The field rules.
@@ -223,15 +225,23 @@ class RepeaterFieldType extends FieldType
         /* @var StreamInterface $stream */
         $stream = $this->getRelatedStream();
 
+        $builderClassName = $stream->getEntryModel()->getBoundModelNamespace()
+            .'\\Support\\RepeaterFieldType\\FormBuilder';
+
+        if (!class_exists($builderClassName))
+        {
+            $builderClassName = FormBuilder::class;
+        }
+
         /* @var FormBuilder $builder */
-        $builder = app(FormBuilder::class)
+        $builder = app($builderClassName)
             ->setModel($stream->getEntryModel())
             ->setOption('repeater_instance', $instance)
             ->setOption('repeater_field', $field->getId())
             ->setOption('repeater_prefix', $this->getFieldName())
             ->setOption('form_view', 'anomaly.field_type.repeater::form')
             ->setOption('wrapper_view', 'anomaly.field_type.repeater::wrapper')
-            ->setOption('prefix', $this->getField() . '_' . $instance . '_');
+            ->setOption('prefix', $this->getFieldName() . '_' . $instance . '_');
 
         return $builder;
     }
@@ -247,7 +257,14 @@ class RepeaterFieldType extends FieldType
             return [];
         }
 
-        return $forms->getForms();
+        return array_map(
+            function (FormBuilder $form) {
+                return $form
+                    ->make()
+                    ->getForm();
+            },
+            $forms->getForms()->all()
+        );
     }
 
     /**

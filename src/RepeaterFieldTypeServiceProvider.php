@@ -1,6 +1,11 @@
 <?php namespace Anomaly\RepeaterFieldType;
 
+use Anomaly\Streams\Platform\Addon\AddonCollection;
+use Anomaly\Streams\Platform\Addon\AddonIntegrator;
 use Anomaly\Streams\Platform\Addon\AddonServiceProvider;
+use Anomaly\Streams\Platform\Addon\Module\ModuleCollection;
+use Anomaly\Streams\Platform\Ui\Breadcrumb\BreadcrumbCollection;
+use Illuminate\Http\Request;
 
 /**
  * Class RepeaterFieldTypeServiceProvider
@@ -19,6 +24,39 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $routes = [
-        'streams/field_type/repeater/form/{field}' => 'Anomaly\RepeaterFieldType\Http\Controller\RepeaterController@form'
+        'admin/repeater-field_type/form/{field}' => 'Anomaly\RepeaterFieldType\Http\Controller\Admin\RepeaterController@form',
     ];
+
+    /**
+     * Register the addon.
+     *
+     * @param AddonIntegrator      $integrator
+     * @param Request              $request
+     * @param BreadcrumbCollection $breadcrumb
+     */
+    public function register(AddonIntegrator $integrator, Request $request, BreadcrumbCollection $breadcrumb, AddonCollection $addons, ModuleCollection $modules)
+    {
+        //$breadcrumb->add('anomaly.module.repeaters::addon.name', 'admin/repeaters');
+
+        $addon = $integrator->register(
+            __DIR__ . '/../addons/anomaly/repeaters-module/',
+            'anomaly.module.repeaters',
+            true,
+            true
+        );
+
+        $addons->push($addon);
+
+//        if ($request->segment(2) == 'repeaters') {
+//
+//            $breadcrumb->add('anomaly.module.repeaters::addon.name', 'admin/repeaters');
+//
+//            $integrator->register(
+//                __DIR__ . '/../addons/anomaly/repeaters-module/',
+//                'anomaly.module.repeaters',
+//                true,
+//                true
+//            );
+//        }
+    }
 }
