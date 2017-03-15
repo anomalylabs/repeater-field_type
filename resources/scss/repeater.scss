@@ -1,6 +1,13 @@
 .repeater-field_type {
 
     .repeater-container {
+        position: relative;
+
+        .repeater-actions {
+            bottom: -50px;
+            right: 0px;
+            position: absolute;
+        }
 
         .repeater-item {
             margin: 1rem 0;
