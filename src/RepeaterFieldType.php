@@ -131,7 +131,7 @@ class RepeaterFieldType extends FieldType
     }
 
     /**
-     * Get the pivot table.
+     * Get the related table.
      *
      * @return string
      */
