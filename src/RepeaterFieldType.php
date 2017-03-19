@@ -5,6 +5,7 @@ use Anomaly\RepeaterFieldType\Command\GetMultiformFromValue;
 use Anomaly\RepeaterFieldType\Validation\ValidateRepeater;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
+use Anomaly\Streams\Platform\Entry\EntryModel;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
 use Anomaly\Streams\Platform\Stream\Contract\StreamInterface;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
@@ -130,9 +131,19 @@ class RepeaterFieldType extends FieldType
     }
 
     /**
+     * Get the pivot table.
+     *
+     * @return string
+     */
+    public function getRelatedTableName()
+    {
+        return $this->getRelatedModel()->getTableName();
+    }
+
+    /**
      * Get the related model.
      *
-     * @return null|EntryInterface
+     * @return null|EntryInterface|EntryModel
      */
     public function getRelatedModel()
     {
