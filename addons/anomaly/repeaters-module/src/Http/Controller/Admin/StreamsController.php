@@ -44,6 +44,15 @@ class StreamsController extends AdminController
         return $builder
             ->setPrefix('repeater_')
             ->setNamespace('repeater')
+            ->setSkips(
+                [
+                    'title_column',
+                    'searchable',
+                    'trashable',
+                    'sortable',
+                    'config',
+                ]
+            )
             ->render();
     }
 
@@ -57,6 +66,15 @@ class StreamsController extends AdminController
     {
         return $builder
             ->setNamespace('repeater')
+            ->setSkips(
+                [
+                    'title_column',
+                    'searchable',
+                    'trashable',
+                    'sortable',
+                    'config',
+                ]
+            )
             ->render($this->route->getParameter('id'));
     }
 }
