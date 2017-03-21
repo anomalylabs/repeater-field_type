@@ -13,6 +13,7 @@
         {% endfor %}
     </div>
 
+    {% if (field_type.readonly == 0) %}
     <div class="repeater-controls">
 
         <a href="{{ url('admin/repeater-field_type/form/' ~ field_type.id() ~ '?prefix=' ~ field_type.prefix) }}"
@@ -30,5 +31,6 @@
         {% endif %}
 
     </div>
+    {% endif %}
 
 </div>
