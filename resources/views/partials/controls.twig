@@ -1,10 +1,12 @@
 <div class="repeater-item-controls">
     <ul class="list-inline">
+        {% if (field_type.readonly == 0) %}
         <li class="list-inline-item">
             <a href="#" class="repeater-handle" onclick="return false;">
                 <i class="fa fa-arrows"></i>
             </a>
         </li>
+        {% endif %}
         <li class="list-inline-item">
             {{ field_type.placeholder }}
         </li>
@@ -20,11 +22,13 @@
                data-collapse="{{ trans('anomaly.field_type.repeater::input.collapse') }}">
                 {{ icon('fa fa-compress') }} <span>{{ trans('anomaly.field_type.repeater::input.collapse') }}</span>
             </a>
+            {% if (field_type.readonly == 0) %}
             <div class="dropdown-divider"></div>
             <a href="#" class="dropdown-item text-danger"
                onclick="$(this).closest('.repeater-item').remove(); return false;">
                 <i class="fa fa-trash"></i> <span>{{ trans('anomaly.field_type.repeater::input.delete') }}</span>
             </a>
+            {% endif %}
         </div>
     </div>
 </div>
