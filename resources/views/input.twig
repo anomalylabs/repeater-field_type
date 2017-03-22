@@ -13,24 +13,24 @@
         {% endfor %}
     </div>
 
-    {% if (field_type.readonly == 0) %}
-    <div class="repeater-controls">
+    {% if not field_type.readonly %}
+        <div class="repeater-controls">
 
-        <a href="{{ url('admin/repeater-field_type/form/' ~ field_type.id() ~ '?prefix=' ~ field_type.prefix) }}"
-           class="add-row btn btn-sm btn-success"
-           data-instance="{{ instance }}"
-           data-loading="{{ trans('anomaly.field_type.repeater::message.loading') }}">
-            {{ trans(field_type.config.add_row ?: 'anomaly.field_type.repeater::button.add_row') }}
-        </a>
-
-        {% if field_type.config.manage %}
-            <a href="{{ url('admin/repeaters') }}" class="btn btn-sm btn-warning" target="_blank">
-                {{ icon('fa fa-wrench') }}
-                {{ trans('anomaly.field_type.repeater::button.manage') }}
+            <a href="{{ url('admin/repeater-field_type/form/' ~ field_type.id() ~ '?prefix=' ~ field_type.prefix) }}"
+               class="add-row btn btn-sm btn-success"
+               data-instance="{{ instance }}"
+               data-loading="{{ trans('anomaly.field_type.repeater::message.loading') }}">
+                {{ trans(field_type.config.add_row ?: 'anomaly.field_type.repeater::button.add_row') }}
             </a>
-        {% endif %}
 
-    </div>
+            {% if field_type.config.manage %}
+                <a href="{{ url('admin/repeaters') }}" class="btn btn-sm btn-warning" target="_blank">
+                    {{ icon('fa fa-wrench') }}
+                    {{ trans('anomaly.field_type.repeater::button.manage') }}
+                </a>
+            {% endif %}
+
+        </div>
     {% endif %}
 
 </div>
