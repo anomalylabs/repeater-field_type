@@ -31,6 +31,7 @@ class RepeatersModule extends Module
             ],
             'sections' => [
                 'assignments' => [
+                    'hidden'  => true,
                     'href'    => 'admin/repeaters/assignments/{request.route.parameters.stream}',
                     'buttons' => [
                         'assign_fields' => [
