@@ -1,4 +1,4 @@
-<?php namespace Anomaly\RepeaterFieldType\Http\Controller\Admin;
+<?php namespace Anomaly\RepeaterFieldType\Http\Controller;
 
 use Anomaly\RepeaterFieldType\RepeaterFieldType;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
