@@ -3,7 +3,7 @@
 use Anomaly\RepeaterFieldType\RepeaterFieldType;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
 use Anomaly\Streams\Platform\Field\Contract\FieldRepositoryInterface;
-use Anomaly\Streams\Platform\Http\Controller\BaseController;
+use Anomaly\Streams\Platform\Http\Controller\PublicController;
 
 /**
  * Class RepeaterController
@@ -12,7 +12,7 @@ use Anomaly\Streams\Platform\Http\Controller\BaseController;
  * @author PyroCMS, Inc. <support@pyrocms.com>
  * @author Ryan Thompson <ryan@pyrocms.com>
  */
-class RepeaterController extends BaseController
+class RepeaterController extends PublicController
 {
 
     /**
