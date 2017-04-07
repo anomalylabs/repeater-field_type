@@ -25,7 +25,7 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $routes = [
-        'admin/repeater-field_type/form/{field}' => 'Anomaly\RepeaterFieldType\Http\Controller\Admin\RepeaterController@form',
+        'repeater-field_type/form/{field}' => 'Anomaly\RepeaterFieldType\Http\Controller\RepeaterController@form',
     ];
 
     /**
