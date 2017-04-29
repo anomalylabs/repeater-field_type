@@ -1,106 +1,129 @@
 $(function () {
+    var toggleCollapseItem = function ($item) {
+        var $toggle = $item.find('[data-toggle="collapse"]');
+        var $text = $toggle.find('span');
 
-    var repeaters = $('[data-provides="anomaly.field_type.repeater"]:not([data-initialized])');
+        $item
+            .toggleClass('collapsed')
+            .find('[data-toggle="collapse"] i')
+            .toggleClass('fa-compress')
+            .toggleClass('fa-expand');
 
-    repeaters.each(function () {
+        if ($toggle.find('i').hasClass('fa-compress')) {
+            $text.text($toggle.data('collapse'));
+        } else {
+            $text.text($toggle.data('expand'));
+        }
+    };
 
-        $(this).attr('data-initialized', '');
+    var $repeaters = $('[data-provides="anomaly.field_type.repeater"]:not([data-initialized])');
 
-        var wrapper = $(this);
-        var instance = $(this).data('instance');
-        var items = $(this).find('.repeater-item');
-        var add = wrapper.find('.add-row[data-instance="' + instance + '"]');
-        var cookie = 'repeater:' + $(this).closest('.repeater-container').data('field_name');
+    $repeaters.each(function () {
+        var $this = $(this); // This is necessary!!!
+
+        $this.attr('data-initialized', '');
+
+        var $wrapper = $this;
+        var instance = $this.data('instance');
+        var $items = $this.find('.repeater-item');
+        var $add = $wrapper.find('.add-row[data-instance="' + instance + '"]');
+        var cookie = 'repeater:' + $this.closest('.repeater-container').data('field_name');
 
         var collapsed = Cookies.getJSON(cookie);
 
-        items.each(function () {
-
-            var item = $(this);
-            var toggle = $(this).find('[data-toggle="collapse"]');
-            var text = toggle.find('span');
+        $items.each(function () {
+            var $item = $(this);
 
             /**
              * Hide initial items.
              */
-            if (typeof collapsed == 'undefined') {
+            if (typeof collapsed === 'undefined') {
                 collapsed = {};
             }
 
-            if (collapsed[items.index(item)] == true) {
-                item
-                    .toggleClass('collapsed')
-                    .find('[data-toggle="collapse"] i')
-                    .toggleClass('fa-compress')
-                    .toggleClass('fa-expand');
-
-                if (toggle.find('i').hasClass('fa-compress')) {
-                    text.text(toggle.data('collapse'));
-                } else {
-                    text.text(toggle.data('expand'));
-                }
+            if (Boolean(collapsed[$items.index($item)]) === true) {
+                toggleCollapseItem($item);
             }
         });
 
-        wrapper.on('click', '[data-toggle="collapse"]', function () {
+        $wrapper.on('click', '[data-toggle="collapse"]', function () {
+            var $toggle = $(this);
+            var $item = $toggle.closest('.repeater-item');
 
-            var toggle = $(this);
-            var item = toggle.closest('.repeater-item');
-            var text = toggle.find('span');
+            toggleCollapseItem($item);
 
-            item
-                .toggleClass('collapsed')
-                .find('[data-toggle="collapse"] i')
-                .toggleClass('fa-compress')
-                .toggleClass('fa-expand');
-
-            if (toggle.find('i').hasClass('fa-compress')) {
-                text.text(toggle.data('collapse'));
-            } else {
-                text.text(toggle.data('expand'));
-            }
-
-            toggle
+            $toggle
                 .closest('.dropdown')
                 .find('.dropdown-toggle')
                 .trigger('click');
 
-            if (typeof collapsed == 'undefined') {
+            if (typeof collapsed === 'undefined') {
                 collapsed = {};
             }
 
-            collapsed[items.index(item)] = item.hasClass('collapsed');
+            collapsed[$items.index($item)] = $item.hasClass('collapsed');
 
-            Cookies.set(cookie, JSON.stringify(collapsed), {path: window.location.pathname});
+            Cookies.set(
+                cookie,
+                JSON.stringify(collapsed),
+                { path: window.location.pathname }
+            );
 
             return false;
         });
 
-        wrapper.indexCollapsed = function () {
+        $wrapper.on('click', '[data-toggle="collapseAll"]', function (e) {
+            e.preventDefault();
 
-            wrapper.find('.repeater-list').find('.repeater-item').each(function (index) {
+            var $items = $wrapper.find('.repeater-item');
 
-                var item = $(this);
+            if (!$items.hasClass('collapsed')) {
+                $items.each(function () {
+                    toggleCollapseItem($(this));
+                });
+            } else {
+                $items.each(function () {
+                    var $this = $(this);
 
-                if (typeof collapsed == 'undefined') {
-                    collapsed = {};
-                }
+                    if ($this.hasClass('collapsed')) {
+                        toggleCollapseItem($(this));
+                    };
+                });
+            }
+        });
 
-                collapsed[index] = item.hasClass('collapsed');
+        $wrapper.indexCollapsed = function () {
+            $wrapper
+                .find('.repeater-list')
+                .find('.repeater-item')
+                .each(function (index) {
+                    var $item = $(this);
 
-                Cookies.set(cookie, JSON.stringify(collapsed), {path: window.location.pathname});
-            });
+                    if (typeof collapsed === 'undefined') {
+                        collapsed = {};
+                    }
+
+                    collapsed[index] = $item.hasClass('collapsed');
+
+                    Cookies.set(
+                        cookie,
+                        JSON.stringify(collapsed),
+                        { path: window.location.pathname }
+                    );
+                });
         };
 
-        wrapper.sort = function () {
-            wrapper.find('> .repeater-list').sortable({
+        $wrapper.sort = function () {
+            var adjustment;
+
+            $wrapper.find('> .repeater-list').sortable({
                 handle: '.repeater-handle',
                 placeholder: '<div class="placeholder"></div>',
                 containerSelector: '.repeater-list',
                 itemSelector: '.repeater-item',
                 nested: false,
-                onDragStart: function ($item, container, _super, event) {
 
+                onDragStart: function ($item, container, _super, event) {
                     $item.css({
                         height: $item.outerHeight(),
                         width: $item.outerWidth()
@@ -115,50 +138,61 @@ $(function () {
 
                     _super($item, container);
                 },
+
                 onDrag: function ($item, position) {
                     $item.css({
                         left: position.left - adjustment.left,
                         top: position.top - adjustment.top
                     });
                 },
+
                 afterMove: function ($placeholder) {
+                    $placeholder
+                        .closest('.repeater-list')
+                        .find('.dragged')
+                        .detach()
+                        .insertBefore($placeholder);
 
-                    $placeholder.closest('.repeater-list').find('.dragged').detach().insertBefore($placeholder);
-
-                    wrapper.indexCollapsed();
+                    $wrapper.indexCollapsed();
                 },
-                serialize: function ($parent, $children, parentIsContainer) {
 
+                serialize: function ($parent, $children, parentIsContainer) {
                     var result = $.extend({}, $parent.data());
 
-                    if (parentIsContainer)
+                    if (parentIsContainer) {
                         return [$children];
-                    else if ($children[0]) {
-                        result.children = $children[0]; // This needs to return [0] for some reason..
+                    } else if ($children[0]) {
+                        // This needs to return [0] for some reason..
+                        result.children = $children[0];
                     }
 
                     delete result.subContainers;
                     delete result.sortable;
 
-                    return result
-                }
+                    return result;
+                },
             });
         };
 
-        wrapper.sort();
+        $wrapper.sort();
 
-        add.click(function (e) {
-
+        $add.click(function (e) {
             e.preventDefault();
 
-            var count = wrapper.find('.repeater-item').length + 1;
+            var $this = $(this);
+            var count = $wrapper.find('.repeater-item').length + 1;
 
-            $(wrapper)
+            $wrapper
                 .find('> .repeater-list')
-                .append($('<div class="repeater-item"><div class="repeater-loading">' + $(this).data('loading') + '...</div></div>').load($(this).attr('href') + '&instance=' + count, function () {
-                    wrapper.sort();
-                    wrapper.indexCollapsed();
-                }));
+                .append(
+                    $('<div class="repeater-item"><div class="repeater-loading">' +
+                        $this.data('loading') + '...</div></div>').load(
+                        $this.attr('href') + '&instance=' + count, function () {
+                            $wrapper.sort();
+                            $wrapper.indexCollapsed();
+                        }
+                    )
+                );
         });
     });
 });

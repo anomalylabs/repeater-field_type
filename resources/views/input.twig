@@ -8,6 +8,13 @@
 
 <div {{ html_attributes(field_type.attributes) }} data-instance="{{ instance }}">
 
+    <div class="repeater-actions">
+        <a href="#" class="add-row btn btn-sm btn-info pull-right"
+            data-toggle="collapseAll">
+            Collaple/expand all
+        </a>
+    </div>
+
     <div class="repeater-list">
         {% for form in field_type.forms %}
             {% include "anomaly.field_type.repeater::item" with {'form': form} %}
