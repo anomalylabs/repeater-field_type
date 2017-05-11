@@ -153,12 +153,36 @@ $(function () {
 
             var count = wrapper.find('.repeater-item').length + 1;
 
-            $(wrapper)
-                .find('> .repeater-list')
-                .append($('<div class="repeater-item"><div class="repeater-loading">' + $(this).data('loading') + '...</div></div>').load($(this).attr('href') + '&instance=' + count, function () {
-                    wrapper.sort();
-                    wrapper.indexCollapsed();
-                }));
+            var $repeaterItem = $('<div class="repeater-item"><div class="repeater-loading">' + $(this).data('loading') + '...</div></div>');
+
+            $(wrapper).find('> .repeater-list').append($repeaterItem);
+
+            $.get($(this).attr('href') + '&instance=' + count, function (data) {
+
+                /**
+                 * This is a hack to get around a bug that exists in the editor field type.
+                 * If ace has already been loaded then search for a line containing ace.js and remove it.
+                 */
+                if(typeof(ace) === 'object') {
+                    var dataArray = data.split('\n');
+                    var removeIndex = -1;
+                    for(var i = 0; i < dataArray.length; i++) {
+                        if(dataArray[i].includes('ace.js')) {
+                            removeIndex = i;
+                        }
+                    }
+                    if(removeIndex > -1) {
+                        dataArray.splice(removeIndex, 1);
+                    }
+
+                    data = dataArray.join('\n');
+                }
+
+                $repeaterItem.html(data);
+
+                wrapper.sort();
+                wrapper.indexCollapsed();
+            });
         });
     });
 });
