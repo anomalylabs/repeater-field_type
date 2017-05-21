@@ -42,36 +42,101 @@ $(function () {
             }
         });
 
+        wrapper.on('dblclick', '.repeater-item-controls', function () {
+            $(this).find('[data-toggle="collapse"]:first').trigger('click');
+        });
+
         wrapper.on('click', '[data-toggle="collapse"]', function () {
-
-            var toggle = $(this);
-            var item = toggle.closest('.repeater-item');
-            var text = toggle.find('span');
-
-            item
-                .toggleClass('collapsed')
-                .find('[data-toggle="collapse"] i')
-                .toggleClass('fa-compress')
-                .toggleClass('fa-expand');
-
-            if (toggle.find('i').hasClass('fa-compress')) {
-                text.text(toggle.data('collapse'));
-            } else {
-                text.text(toggle.data('expand'));
-            }
-
-            toggle
-                .closest('.dropdown')
-                .find('.dropdown-toggle')
-                .trigger('click');
 
             if (typeof collapsed == 'undefined') {
                 collapsed = {};
             }
 
-            collapsed[items.index(item)] = item.hasClass('collapsed');
+            // Stash the action.
+            var action = $(this).find('i').hasClass('fa-expand') ? 'expanding' : 'collapsing';
+
+            // Check this row.
+            $(this).closest('.repeater-item').find('input[type="checkbox"]:first').prop('checked', true);
+
+            // Hide the dropdown menu.
+            $(this).closest('.repeater-item').find('.dropdown:first .open').removeClass('open');
+
+            wrapper.find('.repeater-item').each(function () {
+
+                var item = $(this);
+                var toggle = item.find('[data-toggle="collapse"]');
+                var checkbox = item.find('input[type="checkbox"]:first');
+                var text = toggle.find('span');
+
+                if (action == 'collapsing' && item.hasClass('collapsed')) {
+                    checkbox.prop('checked', false);
+                }
+
+                if (action == 'expanding' && !item.hasClass('collapsed')) {
+                    checkbox.prop('checked', false);
+                }
+
+                if (checkbox.prop('checked')) {
+                    item
+                        .toggleClass('collapsed')
+                        .find('[data-toggle="collapse"] i')
+                        .toggleClass('fa-compress')
+                        .toggleClass('fa-expand');
+
+                    if (toggle.find('i').hasClass('fa-compress')) {
+                        text.text(toggle.data('collapse'));
+                    } else {
+                        text.text(toggle.data('expand'));
+                    }
+
+                    toggle
+                        .closest('.dropdown')
+                        .find('.dropdown-toggle')
+                        .trigger('click');
+
+                    checkbox.prop('checked', false);
+
+                    collapsed[items.index(item)] = item.hasClass('collapsed');
+                }
+            });
 
             Cookies.set(cookie, JSON.stringify(collapsed), {path: window.location.pathname});
+
+            return false;
+        });
+
+        wrapper.on('click', '[data-delete="row"]', function () {
+
+            // Check this row.
+            $(this).closest('.repeater-item').find('input[type="checkbox"]:first').prop('checked', true);
+
+            // Hide the dropdown menu.
+            $(this).closest('.repeater-item').find('.dropdown:first .open').removeClass('open');
+
+            wrapper.find('.repeater-item').each(function () {
+
+                var item = $(this);
+                var checkbox = item.find('input[type="checkbox"]:first');
+
+                if (checkbox.prop('checked')) {
+                    item.remove();
+                }
+            });
+
+            return false;
+        });
+
+        wrapper.on('click', '[data-select="all"]', function () {
+
+            wrapper.find('.repeater-item').each(function () {
+
+                var item = $(this);
+                var checkbox = item.find('input[type="checkbox"]:first');
+
+                if (!checkbox.prop('checked')) {
+                    checkbox.prop('checked', true);
+                }
+            });
 
             return false;
         });
