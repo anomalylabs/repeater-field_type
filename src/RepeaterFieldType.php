@@ -223,11 +223,13 @@ class RepeaterFieldType extends FieldType
     public function getSearchableValue()
     {
         return json_encode(
-            array_map(
-                function ($entry) {
-                    return $entry->entry->toSearchableArray();
-                },
-                $this->entry->{$this->getField()}->all()
+            array_filter(
+                array_map(
+                    function (EntryInterface $row) {
+                        return $row->toSearchableArray();
+                    },
+                    $this->entry->{$this->getField()}->all()
+                )
             )
         );
     }
