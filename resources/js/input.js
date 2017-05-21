@@ -141,6 +141,17 @@ $(function () {
             return false;
         });
 
+        wrapper.on('click', '[data-add="above"]', function () {
+
+            wrapper.find('.repeater-item.target').removeClass('target');
+
+            $(this).closest('.repeater-item').addClass('target');
+
+            wrapper.find('> .repeater-controls > a.add-row').trigger('click');
+
+            return false;
+        });
+
         wrapper.indexCollapsed = function () {
 
             wrapper.find('.repeater-list').find('.repeater-item').each(function (index) {
@@ -220,7 +231,13 @@ $(function () {
 
             var $repeaterItem = $('<div class="repeater-item"><div class="repeater-loading">' + $(this).data('loading') + '...</div></div>');
 
-            $(wrapper).find('> .repeater-list').append($repeaterItem);
+            var target = $(wrapper).find('> .repeater-list > .repeater-item.target');
+
+            if (target.length) {
+                target.removeClass('target').before($repeaterItem);
+            } else {
+                $(wrapper).find('> .repeater-list').first().append($repeaterItem);
+            }
 
             $.get($(this).attr('href') + '&instance=' + count, function (data) {
 
@@ -228,15 +245,15 @@ $(function () {
                  * This is a hack to get around a bug that exists in the editor field type.
                  * If ace has already been loaded then search for a line containing ace.js and remove it.
                  */
-                if(typeof(ace) === 'object') {
+                if (typeof(ace) === 'object') {
                     var dataArray = data.split('\n');
                     var removeIndex = -1;
-                    for(var i = 0; i < dataArray.length; i++) {
-                        if(dataArray[i].includes('ace.js')) {
+                    for (var i = 0; i < dataArray.length; i++) {
+                        if (dataArray[i].includes('ace.js')) {
                             removeIndex = i;
                         }
                     }
-                    if(removeIndex > -1) {
+                    if (removeIndex > -1) {
                         dataArray.splice(removeIndex, 1);
                     }
 
