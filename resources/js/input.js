@@ -262,6 +262,10 @@ $(function () {
 
                 $repeaterItem.html(data);
 
+                $('html, body').animate({
+                    scrollTop: $repeaterItem.offset().top - 140
+                }, 200);
+
                 wrapper.sort();
                 wrapper.indexCollapsed();
             });
