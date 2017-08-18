@@ -75,6 +75,6 @@ class StreamsController extends AdminController
                     'config',
                 ]
             )
-            ->render($this->route->getParameter('id'));
+            ->render($this->route->parameter('id'));
     }
 }
