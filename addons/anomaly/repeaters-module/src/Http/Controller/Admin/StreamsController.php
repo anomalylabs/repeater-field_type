@@ -60,10 +60,9 @@ class StreamsController extends AdminController
      * Edit an existing stream.
      *
      * @param StreamFormBuilder $builder
-     * @param                   $id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function edit(StreamFormBuilder $builder, $id)
+    public function edit(StreamFormBuilder $builder)
     {
         return $builder
             ->setNamespace('repeater')
@@ -76,6 +75,6 @@ class StreamsController extends AdminController
                     'config',
                 ]
             )
-            ->render($id);
+            ->render($this->route->getParameter('id'));
     }
 }
