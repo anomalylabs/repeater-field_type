@@ -257,13 +257,7 @@ class RepeaterFieldType extends FieldType
         }
 
         /* @var FormBuilder $builder */
-<<<<<<< HEAD
-        $builder = app($builderClassName)
-            ->setModel($stream->getEntryModel())
-=======
         $builder = $model->newRepeaterFieldTypeFormBuilder()
-            ->setModel($model)
->>>>>>> 44b464144cc3703efc4fb11c04c41a515c648dcb
             ->setOption('repeater_instance', $instance)
             ->setOption('repeater_field', $field->getId())
             ->setOption('repeater_prefix', $this->getFieldName())
