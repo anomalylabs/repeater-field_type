@@ -1,6 +1,10 @@
 <?php namespace Anomaly\RepeatersModule;
 
+use Anomaly\RepeatersModule\Http\Controller\Admin\AssignmentsController;
+use Anomaly\RepeatersModule\Http\Controller\Admin\FieldsController;
 use Anomaly\Streams\Platform\Addon\AddonServiceProvider;
+use Anomaly\Streams\Platform\Assignment\AssignmentRouter;
+use Anomaly\Streams\Platform\Field\FieldRouter;
 
 /**
  * Class RepeatersModuleServiceProvider
@@ -18,16 +22,20 @@ class RepeatersModuleServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $routes = [
-        'admin/repeaters'                                => 'Anomaly\RepeatersModule\Http\Controller\Admin\StreamsController@index',
-        'admin/repeaters/create'                         => 'Anomaly\RepeatersModule\Http\Controller\Admin\StreamsController@create',
-        'admin/repeaters/edit/{id}'                      => 'Anomaly\RepeatersModule\Http\Controller\Admin\StreamsController@edit',
-        'admin/repeaters/fields'                         => 'Anomaly\RepeatersModule\Http\Controller\Admin\FieldsController@index',
-        'admin/repeaters/fields/choose'                  => 'Anomaly\RepeatersModule\Http\Controller\Admin\FieldsController@choose',
-        'admin/repeaters/fields/create'                  => 'Anomaly\RepeatersModule\Http\Controller\Admin\FieldsController@create',
-        'admin/repeaters/fields/edit/{id}'               => 'Anomaly\RepeatersModule\Http\Controller\Admin\FieldsController@edit',
-        'admin/repeaters/assignments/{stream}'           => 'Anomaly\RepeatersModule\Http\Controller\Admin\AssignmentsController@index',
-        'admin/repeaters/assignments/{stream}/choose'    => 'Anomaly\RepeatersModule\Http\Controller\Admin\AssignmentsController@choose',
-        'admin/repeaters/assignments/{stream}/create'    => 'Anomaly\RepeatersModule\Http\Controller\Admin\AssignmentsController@create',
-        'admin/repeaters/assignments/{stream}/edit/{id}' => 'Anomaly\RepeatersModule\Http\Controller\Admin\AssignmentsController@edit',
+        'admin/repeaters'           => 'Anomaly\RepeatersModule\Http\Controller\Admin\StreamsController@index',
+        'admin/repeaters/create'    => 'Anomaly\RepeatersModule\Http\Controller\Admin\StreamsController@create',
+        'admin/repeaters/edit/{id}' => 'Anomaly\RepeatersModule\Http\Controller\Admin\StreamsController@edit',
     ];
+
+    /**
+     * Map the addon.
+     *
+     * @param FieldRouter      $fields
+     * @param AssignmentRouter $assignments
+     */
+    public function map(FieldRouter $fields, AssignmentRouter $assignments)
+    {
+        $fields->route($this->addon, FieldsController::class);
+        $assignments->route($this->addon, AssignmentsController::class);
+    }
 }

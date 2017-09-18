@@ -3,9 +3,10 @@
 use Anomaly\Streams\Platform\Addon\AddonCollection;
 use Anomaly\Streams\Platform\Addon\AddonIntegrator;
 use Anomaly\Streams\Platform\Addon\AddonServiceProvider;
-use Anomaly\Streams\Platform\Addon\Module\ModuleCollection;
-use Anomaly\Streams\Platform\Ui\Breadcrumb\BreadcrumbCollection;
-use Illuminate\Http\Request;
+use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
+use Anomaly\Streams\Platform\Entry\EntryModel;
+use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
+use Illuminate\Contracts\Container\Container;
 
 /**
  * Class RepeaterFieldTypeServiceProvider
@@ -24,22 +25,23 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
      * @var array
      */
     protected $routes = [
-        'admin/repeater-field_type/form/{field}' => 'Anomaly\RepeaterFieldType\Http\Controller\Admin\RepeaterController@form',
+        'repeater-field_type/form/{field}' => 'Anomaly\RepeaterFieldType\Http\Controller\RepeaterController@form',
     ];
 
     /**
      * Register the addon.
      *
-     * @param AddonIntegrator      $integrator
-     * @param Request              $request
-     * @param BreadcrumbCollection $breadcrumb
+     * @param AddonIntegrator $integrator
+     * @param AddonCollection $addons
+     * @param EntryModel      $model
      */
-    public function register(AddonIntegrator $integrator, Request $request, BreadcrumbCollection $breadcrumb, AddonCollection $addons, ModuleCollection $modules)
-    {
-        //$breadcrumb->add('anomaly.module.repeaters::addon.name', 'admin/repeaters');
-
+    public function register(
+        AddonIntegrator $integrator,
+        AddonCollection $addons,
+        EntryModel $model
+    ) {
         $addon = $integrator->register(
-            __DIR__ . '/../addons/anomaly/repeaters-module/',
+            realpath(__DIR__ . '/../addons/anomaly/repeaters-module/'),
             'anomaly.module.repeaters',
             true,
             true
@@ -47,16 +49,19 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
 
         $addons->push($addon);
 
-//        if ($request->segment(2) == 'repeaters') {
-//
-//            $breadcrumb->add('anomaly.module.repeaters::addon.name', 'admin/repeaters');
-//
-//            $integrator->register(
-//                __DIR__ . '/../addons/anomaly/repeaters-module/',
-//                'anomaly.module.repeaters',
-//                true,
-//                true
-//            );
-//        }
+        $model->bind(
+            'new_repeater_field_type_form_builder',
+            function (Container $container) {
+
+                /* @var EntryInterface $this */
+                $builder = $this->getBoundModelNamespace() . '\\Support\\RepeaterFieldType\\FormBuilder';
+
+                if (class_exists($builder)) {
+                    return $container->make($builder);
+                }
+
+                return $container->make(FormBuilder::class);
+            }
+        );
     }
 }

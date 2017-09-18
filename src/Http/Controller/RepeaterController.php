@@ -1,9 +1,9 @@
-<?php namespace Anomaly\RepeaterFieldType\Http\Controller\Admin;
+<?php namespace Anomaly\RepeaterFieldType\Http\Controller;
 
 use Anomaly\RepeaterFieldType\RepeaterFieldType;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
 use Anomaly\Streams\Platform\Field\Contract\FieldRepositoryInterface;
-use Anomaly\Streams\Platform\Http\Controller\AdminController;
+use Anomaly\Streams\Platform\Http\Controller\PublicController;
 
 /**
  * Class RepeaterController
@@ -12,7 +12,7 @@ use Anomaly\Streams\Platform\Http\Controller\AdminController;
  * @author PyroCMS, Inc. <support@pyrocms.com>
  * @author Ryan Thompson <ryan@pyrocms.com>
  */
-class RepeaterController extends AdminController
+class RepeaterController extends PublicController
 {
 
     /**

@@ -24,7 +24,7 @@
             .repeater-item-controls {
                 color: #ffffff;
                 background: #3e3e3e;
-                padding: .5rem $spacer-x;
+                padding: .5rem 1rem; // @todo: Why do variables break here?
 
                 a {
                     color: #ffffff;
@@ -32,7 +32,7 @@
 
                 .dropdown-menu {
                     a {
-                        color: $dropdown-link-color;
+                        color: #55595c; // @todo: Why do variables break here?
                     }
                 }
 
