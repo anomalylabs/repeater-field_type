@@ -247,24 +247,15 @@ class RepeaterFieldType extends FieldType
         /* @var EntryInterface $model */
         $stream = $this->getRelatedStream();
         $model  = $stream->getEntryModel();
-
-        $builderClassName = $stream->getEntryModel()->getBoundModelNamespace()
-            .'\\Support\\RepeaterFieldType\\FormBuilder';
-
-        if (!class_exists($builderClassName))
-        {
-            $builderClassName = FormBuilder::class;
-        }
-
         /* @var FormBuilder $builder */
         $builder = $model->newRepeaterFieldTypeFormBuilder()
+            ->setModel($model)
             ->setOption('repeater_instance', $instance)
             ->setOption('repeater_field', $field->getId())
             ->setOption('repeater_prefix', $this->getFieldName())
             ->setOption('form_view', 'anomaly.field_type.repeater::form')
             ->setOption('wrapper_view', 'anomaly.field_type.repeater::wrapper')
             ->setOption('prefix', $this->getFieldName() . '_' . $instance . '_');
-
         return $builder;
     }
 
