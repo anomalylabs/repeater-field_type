@@ -3,6 +3,7 @@
 use Anomaly\Streams\Platform\Http\Controller\AdminController;
 use Anomaly\Streams\Platform\Stream\Form\StreamFormBuilder;
 use Anomaly\Streams\Platform\Stream\Table\StreamTableBuilder;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class StreamsController
@@ -29,6 +30,12 @@ class StreamsController extends AdminController
                     'edit',
                     'assignments',
                 ]
+            )
+            ->on(
+                'querying',
+                function (Builder $query) {
+                    $query->where('hidden', false);
+                }
             )
             ->render();
     }

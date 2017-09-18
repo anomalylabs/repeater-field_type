@@ -19,7 +19,7 @@ class RepeaterFieldTypeSchema extends FieldTypeSchema
     /**
      * Add the field type's pivot table.
      *
-     * @param Blueprint           $table
+     * @param Blueprint $table
      * @param AssignmentInterface $assignment
      */
     public function addColumn(Blueprint $table, AssignmentInterface $assignment)
@@ -30,14 +30,17 @@ class RepeaterFieldTypeSchema extends FieldTypeSchema
 
         $this->schema->create(
             $table,
-            function (Blueprint $table) {
+            function (Blueprint $table) use ($assignment) {
 
                 $table->increments('id');
                 $table->integer('entry_id');
                 $table->integer('related_id');
                 $table->integer('sort_order')->nullable();
 
-                $table->unique(['entry_id', 'related_id'], 'unique-relations');
+                $table->unique(
+                    ['entry_id', 'related_id'],
+                    md5($assignment->getId())
+                );
             }
         );
     }
