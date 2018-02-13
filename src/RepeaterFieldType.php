@@ -254,9 +254,9 @@ class RepeaterFieldType extends FieldType
             ->setOption('repeater_instance', $instance)
             ->setOption('repeater_field', $field->getId())
             ->setOption('repeater_prefix', $this->getFieldName())
-            ->setOption('form_view', 'anomaly.field_type.repeater::form')
-            ->setOption('wrapper_view', 'anomaly.field_type.repeater::wrapper')
-            ->setOption('prefix', $this->getFieldName() . '_' . $instance . '_');
+            ->setOption('prefix', $this->getFieldName() . '_' . $instance . '_')
+            ->setOption('form_view', $builder->getOption('form_view', 'anomaly.field_type.repeater::form'))
+            ->setOption('wrapper_view', $builder->getOption('wrapper_view', 'anomaly.field_type.repeater::wrapper'));
 
         return $builder;
     }
