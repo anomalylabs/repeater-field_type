@@ -57,6 +57,8 @@ class GetMultiformFromPost
             /* @var RepeaterFieldType $type */
             $type = $field->getType();
 
+            $type->setPrefix($this->fieldType->getPrefix());
+
             $form = $type->form($field, $item['instance']);
 
             if ($item['entry']) {
@@ -67,6 +69,9 @@ class GetMultiformFromPost
             } catch(\Exception $e) {
                 dd($item);
             }
+            
+            $form->setReadOnly($this->fieldType->isReadOnly());
+            
             $forms->addForm($this->fieldType->getFieldName() . '_' . $item['instance'], $form);
         }
 

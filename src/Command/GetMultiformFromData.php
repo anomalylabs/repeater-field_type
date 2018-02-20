@@ -58,11 +58,15 @@ class GetMultiformFromData
             /* @var RepeaterFieldType $type */
             $type = $field->getType();
 
+            $type->setPrefix($this->fieldType->getPrefix());
+
             $form = $type->form($field, $item['instance']);
 
             if ($item['entry']) {
                 $form->setEntry($item['entry']);
             }
+            
+            $form->setReadOnly($this->fieldType->isReadOnly());
 
             $forms->addForm($this->fieldType->getFieldName() . '_' . $item['instance'], $form);
         }

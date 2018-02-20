@@ -1,5 +1,8 @@
 <?php
 
 return [
-    'add_row' => 'Add Row',
+    'expand'    => 'Expand',
+    'delete'    => 'Delete',
+    'collapse'  => 'Collapse',
+    'add_above' => 'Add Above',
 ];

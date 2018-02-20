@@ -1,25 +1,44 @@
 <div class="repeater-item-controls">
     <ul class="list-inline">
         <li class="list-inline-item">
-            <a href="#" class="repeater-handle" onclick="return false;">
-                <i class="fa fa-arrows"></i>
-            </a>
+            <input type="checkbox">
         </li>
         <li class="list-inline-item">
             {{ field_type.placeholder }}
         </li>
     </ul>
 
-    <ul class="list-inline pull-right">
+    <ul class="dropdown pull-right list-inline">
+
         <li class="list-inline-item">
-            <a href="#" data-toggle="collapse">
-                <i class="fa fa-toggle-on"></i>
+            <a href="#" data-toggle="dropdown">
+                {{ icon('cog') }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+                <a href="#" class="dropdown-item" data-toggle="collapse"
+                   data-expand="{{ trans('anomaly.field_type.repeater::input.expand') }}"
+                   data-collapse="{{ trans('anomaly.field_type.repeater::input.collapse') }}">
+                    {{ icon('fa fa-compress') }} <span>{{ trans('anomaly.field_type.repeater::input.collapse') }}</span>
+                </a>
+                {% if not (field_type.readonly) %}
+                    <a href="#" class="dropdown-item" data-add="above">
+                        <i class="fa fa-plus"></i>
+                        <span>{{ trans('anomaly.field_type.repeater::input.add_above') }}</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item text-danger" data-delete="row">
+                        <i class="fa fa-trash"></i>
+                        <span>{{ trans('anomaly.field_type.repeater::input.delete') }}</span>
+                    </a>
+                {% endif %}
+            </div>
+        </li>
+
+        <li class="list-inline-item">
+            <a href="#" class="repeater-handle" onclick="return false;">
+                <i class="fa fa-arrows"></i>
             </a>
         </li>
-        <li class="list-inline-item">
-            <a href="#" onclick="$(this).closest('.repeater-item').remove(); return false;">
-                <i class="fa fa-trash"></i>
-            </a>
-        </li>
+
     </ul>
 </div>

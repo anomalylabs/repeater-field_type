@@ -5,6 +5,7 @@ use Anomaly\RepeaterFieldType\Command\GetMultiformFromValue;
 use Anomaly\RepeaterFieldType\Validation\ValidateRepeater;
 use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
+use Anomaly\Streams\Platform\Entry\EntryModel;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
 use Anomaly\Streams\Platform\Stream\Contract\StreamInterface;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
@@ -23,13 +24,6 @@ class RepeaterFieldType extends FieldType
 {
 
     /**
-     * The input class.
-     *
-     * @var string
-     */
-    protected $class = 'repeater-container';
-
-    /**
      * No database column.
      *
      * @var bool
@@ -37,18 +31,18 @@ class RepeaterFieldType extends FieldType
     protected $columnType = false;
 
     /**
+     * The input class.
+     *
+     * @var string
+     */
+    protected $class = 'repeater-container';
+
+    /**
      * The input view.
      *
      * @var string
      */
     protected $inputView = 'anomaly.field_type.repeater::input';
-
-    /**
-     * The filter view.
-     *
-     * @var string
-     */
-    protected $filterView = 'anomaly.field_type.repeater::filter';
 
     /**
      * The field rules.
@@ -128,9 +122,19 @@ class RepeaterFieldType extends FieldType
     }
 
     /**
+     * Get the related table.
+     *
+     * @return string
+     */
+    public function getRelatedTableName()
+    {
+        return $this->getRelatedModel()->getTableName();
+    }
+
+    /**
      * Get the related model.
      *
-     * @return null|EntryInterface
+     * @return null|EntryInterface|EntryModel
      */
     public function getRelatedModel()
     {
@@ -212,6 +216,25 @@ class RepeaterFieldType extends FieldType
     }
 
     /**
+     * Get the value to index.
+     *
+     * @return string
+     */
+    public function getSearchableValue()
+    {
+        return json_encode(
+            array_filter(
+                array_map(
+                    function (EntryInterface $row) {
+                        return $row->toSearchableArray();
+                    },
+                    $this->entry->{$this->getField()}->all()
+                )
+            )
+        );
+    }
+
+    /**
      * Return a form builder instance.
      *
      * @param FieldInterface $field
@@ -221,17 +244,21 @@ class RepeaterFieldType extends FieldType
     public function form(FieldInterface $field, $instance = null)
     {
         /* @var StreamInterface $stream */
+        /* @var EntryInterface $model */
         $stream = $this->getRelatedStream();
+        $model  = $stream->getEntryModel();
 
         /* @var FormBuilder $builder */
-        $builder = app(FormBuilder::class)
-            ->setModel($stream->getEntryModel())
+        $builder = $model->newRepeaterFieldTypeFormBuilder()
+            ->setModel($model)
             ->setOption('repeater_instance', $instance)
             ->setOption('repeater_field', $field->getId())
             ->setOption('repeater_prefix', $this->getFieldName())
-            ->setOption('form_view', 'anomaly.field_type.repeater::form')
-            ->setOption('wrapper_view', 'anomaly.field_type.repeater::wrapper')
-            ->setOption('prefix', $this->getField() . '_' . $instance . '_');
+            ->setOption('prefix', $this->getFieldName() . '_' . $instance . '_');
+        
+        $builder
+            ->setOption('form_view', $builder->getOption('form_view', 'anomaly.field_type.repeater::form'))
+            ->setOption('wrapper_view', $builder->getOption('wrapper_view', 'anomaly.field_type.repeater::wrapper'));
 
         return $builder;
     }
@@ -247,7 +274,14 @@ class RepeaterFieldType extends FieldType
             return [];
         }
 
-        return $forms->getForms();
+        return array_map(
+            function (FormBuilder $form) {
+                return $form
+                    ->make()
+                    ->getForm();
+            },
+            $forms->getForms()->all()
+        );
     }
 
     /**
@@ -270,7 +304,24 @@ class RepeaterFieldType extends FieldType
             return;
         }
 
-        /*
+        /**
+         * Skip self handling field types since they
+         * will handle themselves later. Otherwise
+         * this causes some mad recursion issues.
+         *
+         * @var FormBuilder $form
+         */
+        foreach ($forms->getForms() as $form) {
+
+            $skips = $form
+                ->getFormFields()
+                ->selfHandling()
+                ->fieldSlugs();
+
+            $form->setSkips($skips);
+        }
+
+        /**
          * Handle the post action
          * for all the child forms.
          */

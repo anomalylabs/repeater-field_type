@@ -45,6 +45,7 @@ class RepeaterFieldTypeAccessor extends FieldTypeAccessor
         }
 
         if (!$value) {
+
             $this->fieldType->getRelation()->detach();
 
             return;
