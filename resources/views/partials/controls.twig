@@ -11,9 +11,12 @@
     <ul class="dropdown pull-right list-inline">
 
         <li class="list-inline-item">
+            {% if not (field_type.readonly) %}
             <a href="#" data-toggle="dropdown">
                 {{ icon('cog') }}
             </a>
+            {% endif %}
+            
             <div class="dropdown-menu dropdown-menu-right">
                 <a href="#" class="dropdown-item" data-toggle="collapse"
                    data-expand="{{ trans('anomaly.field_type.repeater::input.expand') }}"
@@ -34,11 +37,13 @@
             </div>
         </li>
 
+        {% if not (field_type.readonly) %}
         <li class="list-inline-item">
             <a href="#" class="repeater-handle" onclick="return false;">
                 <i class="fa fa-arrows"></i>
             </a>
         </li>
+        {% endif %}
 
     </ul>
 </div>
