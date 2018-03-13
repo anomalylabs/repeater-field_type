@@ -12,6 +12,7 @@ use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Anomaly\Streams\Platform\Ui\Form\Multiple\MultipleFormBuilder;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Anomaly\Streams\Platform\Stream\Command\GetStream;
 
 /**
  * Class RepeaterFieldType
