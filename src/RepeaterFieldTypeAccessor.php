@@ -2,6 +2,7 @@
 
 use Anomaly\Streams\Platform\Addon\FieldType\FieldTypeAccessor;
 use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
+use Anomaly\Streams\Platform\Model\EloquentModel;
 use Anomaly\Streams\Platform\Ui\Form\Multiple\MultipleFormBuilder;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -82,6 +83,20 @@ class RepeaterFieldTypeAccessor extends FieldTypeAccessor
      */
     public function get()
     {
+
+        /* @var EloquentModel $entry */
+        $entry = $this->fieldType->getEntry();
+
+        $relation = camel_case($this->fieldType->getFieldName());
+
+        /**
+         * If the relation is already
+         * loaded then don't load again!
+         */
+        if ($entry->relationLoaded($relation)) {
+            return $entry->getRelation($relation);
+        }
+
         return $this->fieldType->getRelation();
     }
 }
