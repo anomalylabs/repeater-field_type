@@ -83,7 +83,6 @@ class RepeaterFieldTypeAccessor extends FieldTypeAccessor
      */
     public function get()
     {
-
         /* @var EloquentModel $entry */
         $entry = $this->fieldType->getEntry();
 
