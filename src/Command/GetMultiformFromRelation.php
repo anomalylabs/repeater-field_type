@@ -70,6 +70,8 @@ class GetMultiformFromRelation
             $forms->addForm($this->fieldType->getFieldName() . '_' . $instance, $form);
         }
 
+        $forms->setOption('success_message', false);
+
         return $forms;
     }
 }
