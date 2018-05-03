@@ -15,7 +15,7 @@
             {% endfor %}
         </div>
 
-        {% if not field_type.readonly %}
+        {% if not field_type.readonly and not field_type.disabled %}
             <div class="repeater-controls">
 
                 <a href="{{ url('repeater-field_type/form/' ~ field_type.id() ~ '?prefix=' ~ field_type.prefix) }}"
