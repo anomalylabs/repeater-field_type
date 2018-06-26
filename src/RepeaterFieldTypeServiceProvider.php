@@ -56,11 +56,9 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
                 /* @var EntryInterface $this */
                 $builder = $this->getBoundModelNamespace() . '\\Support\\RepeaterFieldType\\FormBuilder';
 
-                if (class_exists($builder)) {
-                    return $container->make($builder);
-                }
-
-                return $container->make(FormBuilder::class);
+                return class_exists($builder)
+                    ? $container->make($builder)
+                    : $container->make(FormBuilder::class);
             }
         );
     }
