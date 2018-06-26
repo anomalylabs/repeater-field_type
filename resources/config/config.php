@@ -1,20 +1,23 @@
 <?php
 
 use Anomaly\Streams\Platform\Stream\Contract\StreamInterface;
+use Anomaly\Streams\Platform\Stream\Contract\StreamRepositoryInterface;
 
 return [
     'related' => [
         'type'     => 'anomaly.field_type.select',
         'required' => true,
         'config'   => [
-            'options' => function (\Anomaly\Streams\Platform\Stream\Contract\StreamRepositoryInterface $streams) {
+            'options' => function (StreamRepositoryInterface $streams) {
 
-                $options = [];
-
-                /* @var StreamInterface as $stream */
-                foreach ($streams->findAllByNamespace('repeater') as $stream) {
-                    $options[$stream->getEntryModelName()] = $stream->getName();
-                }
+                $options = $streams->findAllByNamespace('repeater')->reduce(
+                    /* @var StreamInterface as $stream */
+                    function ($acc, StreamInterface $stream) {
+                        $acc[$stream->getEntryModelName()] = $stream->getName();
+                        return $acc;
+                    },
+                    []
+                );
 
                 ksort($options);
 
