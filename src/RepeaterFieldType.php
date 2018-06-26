@@ -12,6 +12,7 @@ use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Anomaly\Streams\Platform\Ui\Form\Multiple\MultipleFormBuilder;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Anomaly\Streams\Platform\Stream\Command\GetStream;
 
 /**
  * Class RepeaterFieldType
@@ -138,7 +139,17 @@ class RepeaterFieldType extends FieldType
      */
     public function getRelatedModel()
     {
-        return $this->container->make($this->config('related'));
+        $model = $this->config('related');
+
+        if (strpos($model, '.')) {
+
+            /* @var StreamInterface $stream */
+            $stream = $this->dispatch(new GetStream($model));
+
+            return $stream->getEntryModel();
+        }
+
+        return $this->container->make($model);
     }
 
     /**
@@ -250,12 +261,16 @@ class RepeaterFieldType extends FieldType
         /* @var FormBuilder $builder */
         $builder = $model->newRepeaterFieldTypeFormBuilder()
             ->setModel($model)
+            ->setOption('success_message', false)
             ->setOption('repeater_instance', $instance)
             ->setOption('repeater_field', $field->getId())
             ->setOption('repeater_prefix', $this->getFieldName())
-            ->setOption('form_view', 'anomaly.field_type.repeater::form')
-            ->setOption('wrapper_view', 'anomaly.field_type.repeater::wrapper')
             ->setOption('prefix', $this->getFieldName() . '_' . $instance . '_');
+
+        $builder
+            ->setOption('form_view', $builder->getOption('form_view', 'anomaly.field_type.repeater::form'))
+            ->setOption('wrapper_view', $builder->getOption('wrapper_view', 'anomaly.field_type.repeater::wrapper'));
+
         return $builder;
     }
 
