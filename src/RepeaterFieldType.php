@@ -254,10 +254,8 @@ class RepeaterFieldType extends FieldType
      */
     public function form(FieldInterface $field, $instance = null)
     {
-        /* @var StreamInterface $stream */
         /* @var EntryInterface $model */
-        $stream = $this->getRelatedStream();
-        $model  = $stream->getEntryModel();
+        $model = $this->getRelatedModel();
 
         /* @var FormBuilder $builder */
         $builder = $model->newRepeaterFieldTypeFormBuilder()
