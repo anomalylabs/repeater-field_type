@@ -7,12 +7,11 @@ use Anomaly\Streams\Platform\Addon\FieldType\FieldType;
 use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
 use Anomaly\Streams\Platform\Entry\EntryModel;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
+use Anomaly\Streams\Platform\Stream\Command\GetStream;
 use Anomaly\Streams\Platform\Stream\Contract\StreamInterface;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Anomaly\Streams\Platform\Ui\Form\Multiple\MultipleFormBuilder;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Anomaly\Streams\Platform\Stream\Command\GetStream;
 
 /**
  * Class RepeaterFieldType
@@ -66,23 +65,6 @@ class RepeaterFieldType extends FieldType
             'handler' => ValidateRepeater::class,
         ],
     ];
-
-    /**
-     * The service container.
-     *
-     * @var Container
-     */
-    protected $container;
-
-    /**
-     * Create a new RepeaterFieldType instance.
-     *
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
 
     /**
      * Return the field ID.
@@ -249,7 +231,7 @@ class RepeaterFieldType extends FieldType
      * Return a form builder instance.
      *
      * @param FieldInterface $field
-     * @param null           $instance
+     * @param null $instance
      * @return FormBuilder
      */
     public function form(FieldInterface $field, $instance = null)
@@ -258,14 +240,14 @@ class RepeaterFieldType extends FieldType
         $model = $this->getRelatedModel();
 
         /* @var FormBuilder $builder */
-        $builder = $model->newRepeaterFieldTypeFormBuilder()
+        $builder = $model->call('new_repeater_field_type_form_builder')
             ->setModel($model)
             ->setOption('success_message', false)
             ->setOption('repeater_instance', $instance)
             ->setOption('repeater_field', $field->getId())
             ->setOption('repeater_prefix', $this->getFieldName())
             ->setOption('prefix', $this->getFieldName() . '_' . $instance . '_');
-        
+
         $builder
             ->setOption('form_view', $builder->getOption('form_view', 'anomaly.field_type.repeater::form'))
             ->setOption('wrapper_view', $builder->getOption('wrapper_view', 'anomaly.field_type.repeater::wrapper'));
