@@ -31,7 +31,6 @@ class RepeaterFieldTypeSchema extends FieldTypeSchema
         $this->schema->create(
             $table,
             function (Blueprint $table) use ($assignment) {
-
                 $table->increments('id');
                 $table->integer('entry_id');
                 $table->integer('related_id');

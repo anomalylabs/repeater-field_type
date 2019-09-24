@@ -1,7 +1,6 @@
 <?php namespace Anomaly\RepeaterFieldType\Command;
 
 use Anomaly\RepeaterFieldType\RepeaterFieldType;
-use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
 use Anomaly\Streams\Platform\Entry\EntryCollection;
 use Anomaly\Streams\Platform\Field\Contract\FieldInterface;
 use Anomaly\Streams\Platform\Field\Contract\FieldRepositoryInterface;
@@ -38,7 +37,7 @@ class GetMultiformFromData
      * Get the multiple form builder from the value.
      *
      * @param FieldRepositoryInterface $fields
-     * @param MultipleFormBuilder      $forms
+     * @param MultipleFormBuilder $forms
      * @return MultipleFormBuilder|null
      */
     public function handle(FieldRepositoryInterface $fields, MultipleFormBuilder $forms)
@@ -65,7 +64,7 @@ class GetMultiformFromData
             if ($item['entry']) {
                 $form->setEntry($item['entry']);
             }
-            
+
             $form->setReadOnly($this->fieldType->isReadOnly());
 
             $forms->addForm($this->fieldType->getFieldName() . '_' . $item['instance'], $form);

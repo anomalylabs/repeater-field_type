@@ -16,5 +16,4 @@ class FieldsController extends \Anomaly\Streams\Platform\Http\Controller\FieldsC
      * @var string
      */
     protected $namespace = 'repeater';
-
 }

@@ -16,5 +16,4 @@ class AssignmentsController extends \Anomaly\Streams\Platform\Http\Controller\As
      * @var string
      */
     protected $namespace = 'repeater';
-
 }

@@ -37,8 +37,8 @@ class GetMultiformFromPost
      * Handle the command.
      *
      * @param FieldRepositoryInterface $fields
-     * @param MultipleFormBuilder      $forms
-     * @param Request                  $request
+     * @param MultipleFormBuilder $forms
+     * @param Request $request
      * @return MultipleFormBuilder|null
      */
     public function handle(FieldRepositoryInterface $fields, MultipleFormBuilder $forms, Request $request)
@@ -66,12 +66,12 @@ class GetMultiformFromPost
             }
             try {
                 $form->build();
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 dd($item);
             }
-            
+
             $form->setReadOnly($this->fieldType->isReadOnly());
-            
+
             $forms->addForm($this->fieldType->getFieldName() . '_' . $item['instance'], $form);
         }
 

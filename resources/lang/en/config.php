@@ -4,8 +4,8 @@ return [
     'related' => [
         'label'        => 'Repeater',
         'instructions' => 'Specify the related <a href="' . url(
-                'admin/repeaters'
-            ) . '" target="_blank">repeater</a>.',
+            'admin/repeaters'
+        ) . '" target="_blank">repeater</a>.',
     ],
     'add_row' => [
         'label'        => 'Add Row',

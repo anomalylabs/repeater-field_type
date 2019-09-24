@@ -95,6 +95,26 @@ class RepeaterFieldType extends FieldType
     }
 
     /**
+     * Get the related model.
+     *
+     * @return null|EntryInterface|EntryModel
+     */
+    public function getRelatedModel()
+    {
+        $model = $this->config('related');
+
+        if (strpos($model, '.')) {
+
+            /* @var StreamInterface $stream */
+            $stream = dispatch_now(new GetStream($model));
+
+            return $stream->getEntryModel();
+        }
+
+        return app($model);
+    }
+
+    /**
      * Get the pivot table.
      *
      * @return string
@@ -115,38 +135,6 @@ class RepeaterFieldType extends FieldType
     }
 
     /**
-     * Get the related model.
-     *
-     * @return null|EntryInterface|EntryModel
-     */
-    public function getRelatedModel()
-    {
-        $model = $this->config('related');
-
-        if (strpos($model, '.')) {
-
-            /* @var StreamInterface $stream */
-            $stream = $this->dispatch(new GetStream($model));
-
-            return $stream->getEntryModel();
-        }
-
-        return $this->container->make($model);
-    }
-
-    /**
-     * Get the related stream.
-     *
-     * @return null|StreamInterface
-     */
-    public function getRelatedStream()
-    {
-        $model = $this->getRelatedModel();
-
-        return $model->getStream();
-    }
-
-    /**
      * Get the rules.
      *
      * @return array
@@ -164,17 +152,6 @@ class RepeaterFieldType extends FieldType
         }
 
         return $rules;
-    }
-
-    /**
-     * Return the input value.
-     *
-     * @param null $default
-     * @return null|MultipleFormBuilder
-     */
-    public function getInputValue($default = null)
-    {
-        return $this->dispatch(new GetMultiformFromPost($this));
     }
 
     /**
@@ -206,6 +183,17 @@ class RepeaterFieldType extends FieldType
                 return $builder->getFormEntryId();
             }
         )->all();
+    }
+
+    /**
+     * Return the input value.
+     *
+     * @param null $default
+     * @return null|MultipleFormBuilder
+     */
+    public function getInputValue($default = null)
+    {
+        return dispatch_now(new GetMultiformFromPost($this));
     }
 
     /**
@@ -262,7 +250,7 @@ class RepeaterFieldType extends FieldType
      */
     public function forms()
     {
-        if (!$forms = $this->dispatch(new GetMultiformFromValue($this))) {
+        if (!$forms = dispatch_now(new GetMultiformFromValue($this))) {
             return [];
         }
 
@@ -290,7 +278,6 @@ class RepeaterFieldType extends FieldType
          * there isn't much we can do.
          */
         if (!$forms = $this->getInputValue()) {
-
             $entry->{$this->getField()} = null;
 
             return;
@@ -304,7 +291,6 @@ class RepeaterFieldType extends FieldType
          * @var FormBuilder $form
          */
         foreach ($forms->getForms() as $form) {
-
             $skips = $form
                 ->getFormFields()
                 ->selfHandling()
@@ -344,5 +330,17 @@ class RepeaterFieldType extends FieldType
         }
 
         return $this->placeholder;
+    }
+
+    /**
+     * Get the related stream.
+     *
+     * @return null|StreamInterface
+     */
+    public function getRelatedStream()
+    {
+        $model = $this->getRelatedModel();
+
+        return $model->getStream();
     }
 }

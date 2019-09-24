@@ -3,7 +3,6 @@
 use Anomaly\RepeaterFieldType\Command\GetMultiformFromPost;
 use Anomaly\RepeaterFieldType\RepeaterFieldType;
 use Anomaly\Streams\Platform\Ui\Form\Multiple\MultipleFormBuilder;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 
 /**
  * Class ValidateRepeater
@@ -15,7 +14,6 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 class ValidateRepeater
 {
 
-    use DispatchesJobs;
 
     /**
      * Handle the command.
@@ -26,7 +24,7 @@ class ValidateRepeater
     public function handle(RepeaterFieldType $fieldType)
     {
         /* @var MultipleFormBuilder $forms */
-        if (!$forms = $this->dispatch(new GetMultiformFromPost($fieldType))) {
+        if (!$forms = dispatch_now(new GetMultiformFromPost($fieldType))) {
             return true;
         }
 

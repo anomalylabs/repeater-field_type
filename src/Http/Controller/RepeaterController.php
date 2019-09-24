@@ -29,10 +29,10 @@ class RepeaterController extends PublicController
         /* @var RepeaterFieldType $type */
         $type = $field->getType();
 
-        $type->setPrefix($this->request->get('prefix'));
+        $type->setPrefix(request('prefix'));
 
         return $type
-            ->form($field, $this->request->get('instance'))
+            ->form($field, request('instance'))
             ->addFormData('field_type', $type)
             ->render();
     }
