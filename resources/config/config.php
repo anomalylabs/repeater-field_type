@@ -38,4 +38,5 @@ return [
             'min' => 1,
         ],
     ],
+    'repeater_title' => 'anomaly.field_type.text'
 ];
