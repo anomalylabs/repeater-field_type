@@ -20,4 +20,8 @@ return [
         'label'        => 'Maximum Items',
         'instructions' => 'Specify the maximum number of allowed items.',
     ],
+    'repeater_title' => [
+        'label'        => 'Repeater Title',
+        'instructions' => 'The title field to use for populating repeater titles from existing entries.',
+    ],
 ];
