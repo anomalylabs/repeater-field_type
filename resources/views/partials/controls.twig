@@ -6,7 +6,11 @@
             </li>
         {% endif %}
         <li class="list-inline-item">
-            {{ field_type.placeholder }} {{ form.entry.getTitleField() != 'id' ? form.entry.getTitleField().value : form.entry.id }}
+            {% if field_type.config.repeater_title %}
+                {{ field_type.placeholder }} {{ form.entry.getFieldValue(field_type.config.repeater_title) }}
+            {% else %}
+                {{ field_type.placeholder }} {{ form.entry.getTitleName() != 'id' ? form.entry.getFieldValue(form.entry.getTitleName()) : form.entry.id }}
+            {% endif %}
         </li>
     </ul>
 
