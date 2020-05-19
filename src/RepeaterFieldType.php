@@ -236,7 +236,7 @@ class RepeaterFieldType extends FieldType
         return json_encode(
             array_filter(
                 array_map(
-                    function (EntryInterface $row) {
+                    function ($row) {
                         return $row->toSearchableArray();
                     },
                     $this->entry->{$this->getField()}->all()
