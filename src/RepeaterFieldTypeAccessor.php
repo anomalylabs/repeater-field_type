@@ -53,6 +53,8 @@ class RepeaterFieldTypeAccessor extends FieldTypeAccessor
         }
 
         $this->fieldType->getRelation()->sync($value);
+        
+        $this->fieldType->getRelation()->getParent()->touch();
     }
 
     /**
