@@ -144,7 +144,7 @@ class RepeaterFieldType extends FieldType
         if (strpos($model, '.')) {
 
             /* @var StreamInterface $stream */
-            $stream = $this->dispatch(new GetStream($model));
+            $stream = dispatch_sync(new GetStream($model));
 
             return $stream->getEntryModel();
         }
@@ -192,7 +192,7 @@ class RepeaterFieldType extends FieldType
      */
     public function getInputValue($default = null)
     {
-        return $this->dispatch(new GetMultiformFromPost($this));
+        return dispatch_sync(new GetMultiformFromPost($this));
     }
 
     /**
@@ -265,7 +265,7 @@ class RepeaterFieldType extends FieldType
             ->setOption('repeater_field', $field->getId())
             ->setOption('repeater_prefix', $this->getFieldName())
             ->setOption('prefix', $this->getFieldName() . '_' . $instance . '_');
-        
+
         $builder
             ->setOption('form_view', $builder->getOption('form_view', 'anomaly.field_type.repeater::form'))
             ->setOption('wrapper_view', $builder->getOption('wrapper_view', 'anomaly.field_type.repeater::wrapper'));
@@ -280,7 +280,7 @@ class RepeaterFieldType extends FieldType
      */
     public function forms()
     {
-        if (!$forms = $this->dispatch(new GetMultiformFromValue($this))) {
+        if (!$forms = dispatch_sync(new GetMultiformFromValue($this))) {
             return [];
         }
 

@@ -3,7 +3,6 @@
 use Anomaly\RepeaterFieldType\RepeaterFieldType;
 use Anomaly\Streams\Platform\Entry\EntryCollection;
 use Anomaly\Streams\Platform\Ui\Form\Multiple\MultipleFormBuilder;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Collection;
 
 /**
@@ -15,9 +14,6 @@ use Illuminate\Support\Collection;
  */
 class GetMultiformFromValue
 {
-
-    use DispatchesJobs;
-
     /**
      * The field type instance.
      *
@@ -48,11 +44,11 @@ class GetMultiformFromValue
         }
 
         if (is_array($value)) {
-            return $this->dispatch(new GetMultiformFromData($this->fieldType));
+            return dispatch_sync(new GetMultiformFromData($this->fieldType));
         }
 
         if ($value instanceof Collection) {
-            return $this->dispatch(new GetMultiformFromRelation($this->fieldType));
+            return dispatch_sync(new GetMultiformFromRelation($this->fieldType));
         }
 
         return null;
