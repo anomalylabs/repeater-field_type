@@ -315,6 +315,15 @@ class RepeaterFieldType extends FieldType
         }
 
         /**
+         * Nothing usable was posted. Leave the
+         * existing relation alone rather than
+         * detaching it or handling no forms.
+         */
+        if (!$forms->getForms()->count()) {
+            return;
+        }
+
+        /**
          * Skip self handling field types since they
          * will handle themselves later. Otherwise
          * this causes some mad recursion issues.

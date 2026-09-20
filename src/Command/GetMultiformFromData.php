@@ -48,27 +48,30 @@ class GetMultiformFromData
             return null;
         }
 
-        foreach ($value as $item) {
+        /* @var FieldInterface $field */
+        if (!$field = $fields->find($this->fieldType->id())) {
+            return null;
+        }
 
-            /* @var FieldInterface $field */
-            if (!$field = $fields->find($item['field'])) {
-                continue;
-            }
+        foreach ((array)$value as $item) {
+
+            $entry    = array_get((array)$item, 'entry');
+            $instance = array_get((array)$item, 'instance');
 
             /* @var RepeaterFieldType $type */
             $type = $field->getType();
 
             $type->setPrefix($this->fieldType->getPrefix());
 
-            $form = $type->form($field, $item['instance']);
+            $form = $type->form($field, $instance);
 
-            if ($item['entry']) {
-                $form->setEntry($item['entry']);
+            if ($entry) {
+                $form->setEntry($entry);
             }
-            
+
             $form->setReadOnly($this->fieldType->isReadOnly());
 
-            $forms->addForm($this->fieldType->getFieldName() . '_' . $item['instance'], $form);
+            $forms->addForm($this->fieldType->getFieldName() . '_' . $instance, $form);
         }
 
         $forms->setOption('success_message', false);
