@@ -357,6 +357,35 @@ class RepeaterFieldType extends FieldType
     }
 
     /**
+     * Return the field slug to title rows with.
+     *
+     * Only a slug the related stream actually assigns is
+     * returned; getFieldValue() throws on anything else.
+     *
+     * @return string|null
+     */
+    public function getRepeaterTitle()
+    {
+        if (!$stream = $this->getRelatedStream()) {
+            return null;
+        }
+
+        $title = array_get($this->getConfig(), 'repeater_title');
+
+        if ($title && $stream->getField($title)) {
+            return $title;
+        }
+
+        $title = $stream->getTitleColumn();
+
+        if ($title && $stream->getField($title)) {
+            return $title;
+        }
+
+        return null;
+    }
+
+    /**
      * Get the placeholder.
      *
      * @return null
