@@ -141,15 +141,57 @@ class RepeaterFieldType extends FieldType
     {
         $model = $this->config('related');
 
-        if (strpos($model, '.')) {
+        if (is_string($model) && strpos($model, '.') !== false) {
 
             /* @var StreamInterface $stream */
             $stream = dispatch_sync(new GetStream($model));
 
-            return $stream->getEntryModel();
+            return $this->guardRelated($stream ? $stream->getEntryModel() : null, $model);
         }
 
-        return $this->container->make($model);
+        /*
+         * Check the class before making it. Anything the
+         * container can build would otherwise be constructed
+         * before it could be rejected.
+         */
+        if (!is_string($model) || !is_subclass_of($model, EntryInterface::class)) {
+            throw new \Exception(
+                "The [related] configuration of field [{$this->getField()}] must name an entry "
+                . "model or a stream."
+            );
+        }
+
+        return $this->guardRelated($this->container->make($model), $model);
+    }
+
+    /**
+     * Return the related model if a repeater may use it.
+     *
+     * @param  mixed  $related
+     * @param  string $model
+     * @return EntryInterface
+     * @throws \Exception
+     */
+    protected function guardRelated($related, $model)
+    {
+        if (!$related instanceof EntryInterface) {
+            throw new \Exception(
+                "The [related] configuration of field [{$this->getField()}] must name an entry "
+                . "model or a stream. [{$model}] is not one."
+            );
+        }
+
+        $protected = (array)config('anomaly.field_type.repeater::related.protected', []);
+
+        if (in_array($namespace = $related->getStreamNamespace(), $protected)) {
+            throw new \Exception(
+                "The [related] configuration of field [{$this->getField()}] may not use the "
+                . "[{$namespace}] namespace. Repeaters write entries through their parent form "
+                . "without the owning module's permission checks."
+            );
+        }
+
+        return $related;
     }
 
     /**
