@@ -1,10 +1,12 @@
 <?php namespace Anomaly\RepeaterFieldType;
 
+use Anomaly\RepeaterFieldType\Listener\GuardFieldSlug;
 use Anomaly\Streams\Platform\Addon\AddonCollection;
 use Anomaly\Streams\Platform\Addon\AddonIntegrator;
 use Anomaly\Streams\Platform\Addon\AddonServiceProvider;
 use Anomaly\Streams\Platform\Entry\Contract\EntryInterface;
 use Anomaly\Streams\Platform\Entry\EntryModel;
+use Anomaly\Streams\Platform\Ui\Form\Event\FormWasBuilt;
 use Anomaly\Streams\Platform\Ui\Form\FormBuilder;
 use Illuminate\Contracts\Container\Container;
 
@@ -26,6 +28,17 @@ class RepeaterFieldTypeServiceProvider extends AddonServiceProvider
      */
     protected $routes = [
         'repeater-field_type/form/{field}' => 'Anomaly\RepeaterFieldType\Http\Controller\RepeaterController@form',
+    ];
+
+    /**
+     * The addon event listeners.
+     *
+     * @var array
+     */
+    protected $listeners = [
+        FormWasBuilt::class => [
+            GuardFieldSlug::class,
+        ],
     ];
 
     /**
