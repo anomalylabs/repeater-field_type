@@ -15,7 +15,24 @@ class StreamsController extends AdminController
 {
 
     /**
+     * The fields to skip.
+     *
+     * @var array
+     */
+    protected $skips = [
+        'title_column',
+        'searchable',
+        'trashable',
+        'sortable',
+        'config',
+    ];
+
+    /**
      * Return an index of repeater streams.
+     *
+     * The builders administer the streams stream rather than
+     * one of this module's own, so the permission convention
+     * derives nothing and each is set explicitly.
      *
      * @param StreamTableBuilder $builder
      * @return \Symfony\Component\HttpFoundation\Response
@@ -24,10 +41,22 @@ class StreamsController extends AdminController
     {
         return $builder
             ->setNamespace('repeater')
+            ->setOption('permission', 'anomaly.module.repeaters::repeaters.read')
+            ->setActions(
+                [
+                    'prompt' => [
+                        'permission' => 'anomaly.module.repeaters::repeaters.delete',
+                    ],
+                ]
+            )
             ->setButtons(
                 [
-                    'edit',
-                    'assignments',
+                    'edit'        => [
+                        'permission' => 'anomaly.module.repeaters::repeaters.write',
+                    ],
+                    'assignments' => [
+                        'permission' => 'anomaly.module.repeaters::repeaters.fields',
+                    ],
                 ]
             )
             ->render();
@@ -44,15 +73,8 @@ class StreamsController extends AdminController
         return $builder
             ->setPrefix('repeater_')
             ->setNamespace('repeater')
-            ->setSkips(
-                [
-                    'title_column',
-                    'searchable',
-                    'trashable',
-                    'sortable',
-                    'config',
-                ]
-            )
+            ->setOption('permission', 'anomaly.module.repeaters::repeaters.write')
+            ->setSkips($this->skips)
             ->render();
     }
 
@@ -66,15 +88,8 @@ class StreamsController extends AdminController
     {
         return $builder
             ->setNamespace('repeater')
-            ->setSkips(
-                [
-                    'title_column',
-                    'searchable',
-                    'trashable',
-                    'sortable',
-                    'config',
-                ]
-            )
+            ->setOption('permission', 'anomaly.module.repeaters::repeaters.write')
+            ->setSkips($this->skips)
             ->render($this->route->parameter('id'));
     }
 }

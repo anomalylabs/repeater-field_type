@@ -1,5 +1,7 @@
 <?php namespace Anomaly\RepeatersModule\Http\Controller\Admin;
 
+use Anomaly\Streams\Platform\Support\Authorizer;
+
 /**
  * Class FieldsController
  *
@@ -17,4 +19,23 @@ class FieldsController extends \Anomaly\Streams\Platform\Http\Controller\FieldsC
      */
     protected $namespace = 'repeater';
 
+    /**
+     * Create a new FieldsController instance.
+     *
+     * @param Authorizer $authorizer
+     */
+    public function __construct(Authorizer $authorizer)
+    {
+        parent::__construct();
+
+        $this->middleware(
+            function ($request, $next) use ($authorizer) {
+                if (!$authorizer->authorize('anomaly.module.repeaters::fields.manage')) {
+                    abort(403);
+                }
+
+                return $next($request);
+            }
+        );
+    }
 }
